@@ -101,6 +101,18 @@ KAIROS.app = (function () {
     searchInput.placeholder = 'Пошук...';
     searchBox.appendChild(searchInput);
 
+    var searchTimer = null;
+    searchInput.addEventListener('keyup', function (e) {
+      clearTimeout(searchTimer);
+      if (e.key === 'Enter') {
+        performSearch(searchInput.value);
+      } else {
+        searchTimer = setTimeout(function () {
+          performSearch(searchInput.value);
+        }, 400);
+      }
+    });
+
     var nav = document.createElement('div');
     nav.className = 'header-nav';
 
@@ -186,6 +198,23 @@ KAIROS.app = (function () {
 
     topicSection.appendChild(topicList);
     sidebar.appendChild(topicSection);
+
+    // Static pages link
+    var staticSection = document.createElement('div');
+    staticSection.className = 'sidebar-section';
+    var staticH3 = document.createElement('h3');
+    staticH3.textContent = 'Довідка';
+    staticSection.appendChild(staticH3);
+    var staticList = document.createElement('ul');
+    staticList.className = 'sidebar-nav';
+    var staticLi = document.createElement('li');
+    var staticA = document.createElement('a');
+    staticA.href = 'index.html';
+    staticA.textContent = 'Головна сторінка';
+    staticLi.appendChild(staticA);
+    staticList.appendChild(staticLi);
+    staticSection.appendChild(staticList);
+    sidebar.appendChild(staticSection);
   }
 
   function updateRightbar() {
@@ -272,6 +301,48 @@ KAIROS.app = (function () {
       KAIROS.tracker.setStudentName(name);
       renderHeader(); // update name in header
       if (callback) callback();
+    });
+  }
+
+  function performSearch(query) {
+    query = (query || '').trim().toLowerCase();
+    var content = document.getElementById('app-content');
+    if (!content) return;
+    if (!query) {
+      KAIROS.router.resolve();
+      return;
+    }
+
+    content.innerHTML = '';
+
+    var header = document.createElement('h2');
+    header.className = 'section-header';
+    header.textContent = 'Результати пошуку: \u201c' + KAIROS.utils.escapeHtml(query) + '\u201d';
+    content.appendChild(header);
+
+    var posts = KAIROS.feed.getAllPosts();
+    var profiles = profilesMap;
+    var results = posts.filter(function (p) {
+      var textMatch = p.content.text.toLowerCase().indexOf(query) !== -1;
+      var prof = profiles[p.authorId];
+      var nameMatch = prof && prof.name.toLowerCase().indexOf(query) !== -1;
+      return textMatch || nameMatch;
+    });
+
+    if (results.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = 'Нічого не знайдено за запитом \u201c' + query + '\u201d';
+      content.appendChild(empty);
+      return;
+    }
+
+    results.forEach(function (post) {
+      var profile = profiles[post.authorId] || {
+        id: post.authorId, name: post.authorId, role: '',
+        avatarUrl: 'img/avatars/default.svg'
+      };
+      content.appendChild(KAIROS.ui.postCard(post, profile));
     });
   }
 
