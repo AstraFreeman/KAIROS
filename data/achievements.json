@@ -1,0 +1,100 @@
+{
+  "achievements": [
+    {
+      "id": "first-view",
+      "name": "Допитливий",
+      "description": "Переглянути перший допис",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "posts-viewed", "count": 1 },
+      "points": 5
+    },
+    {
+      "id": "first-like",
+      "name": "Перший лайк",
+      "description": "Вподобати перший допис",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "action-count", "action": "like", "count": 1 },
+      "points": 5
+    },
+    {
+      "id": "first-comment",
+      "name": "Перший коментар",
+      "description": "Залишити свій перший коментар",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "action-count", "action": "comment", "count": 1 },
+      "points": 5
+    },
+    {
+      "id": "first-complete",
+      "name": "Перше завдання",
+      "description": "Виконати перше завдання",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "posts-completed", "count": 1 },
+      "points": 10
+    },
+    {
+      "id": "active-reader",
+      "name": "Активний читач",
+      "description": "Переглянути 10 дописів",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "posts-viewed", "count": 10 },
+      "points": 15
+    },
+    {
+      "id": "diligent-student",
+      "name": "Старанний студент",
+      "description": "Виконати 5 завдань",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "posts-completed", "count": 5 },
+      "points": 25
+    },
+    {
+      "id": "commentator",
+      "name": "Коментатор",
+      "description": "Написати 5 коментарів",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "action-count", "action": "comment", "count": 5 },
+      "points": 15
+    },
+    {
+      "id": "source-critic",
+      "name": "Критик джерел",
+      "description": "Виконати 3 завдання з аналізу першоджерел",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "task-type-count", "taskType": "source-analysis", "count": 3 },
+      "points": 25
+    },
+    {
+      "id": "debater",
+      "name": "Полеміст",
+      "description": "Виконати 2 дискусійних завдання",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "task-type-count", "taskType": "debate", "count": 2 },
+      "points": 20
+    },
+    {
+      "id": "points-50",
+      "name": "Напівсотня",
+      "description": "Набрати 50 балів",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "points-threshold", "points": 50 },
+      "points": 10
+    },
+    {
+      "id": "points-100",
+      "name": "Сотня",
+      "description": "Набрати 100 балів",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "points-threshold", "points": 100 },
+      "points": 20
+    },
+    {
+      "id": "ancient-explorer",
+      "name": "Дослідник античності",
+      "description": "Виконати 80% завдань з теми «Стародавній світ»",
+      "icon": "img/badges/default.svg",
+      "condition": { "type": "topic-complete", "topic": "starodavnij-svit", "threshold": 0.8 },
+      "points": 30
+    }
+  ]
+}

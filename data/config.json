@@ -1,0 +1,11 @@
+{
+  "feedPageSize": 5,
+  "feedAlgorithm": {
+    "unseenWeight": 3,
+    "prerequisiteMetWeight": 5,
+    "difficultyMatchWeight": 2,
+    "topicDiversityWeight": 1,
+    "randomFactor": 0.3
+  },
+  "maxDifficultyJump": 2
+}

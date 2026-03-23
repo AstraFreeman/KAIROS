@@ -1,0 +1,72 @@
+{
+  "posts": [
+    {
+      "id": "su-001",
+      "authorId": "braudel",
+      "displayDate": "23 березня о 10:45",
+      "type": "task",
+      "taskType": "historiography",
+      "difficulty": 3,
+      "topic": "suchasnist",
+      "content": {
+        "text": "Друзі, я вважаю, що найважливіші зміни в історії відбуваються повільно — la longue durée. Коротка подія (guerre, bataille) — лише рябь на поверхні. Як пояснити учням цю концепцію? Наведіть приклад «довгої тривалості» з історії XX століття.",
+        "attachment": "Три рівні часу за Броделем: 1) Longue durée — структури (клімат, географія, менталітет). 2) Conjonctures — середні цикли (економічні, соціальні). 3) Événements — події (війни, революції)."
+      },
+      "methodologicalFocus": "Концепція longue durée, рівні історичного часу",
+      "points": 20,
+      "prerequisites": [],
+      "unlocks": ["su-002"]
+    },
+    {
+      "id": "su-002",
+      "authorId": "prof-kovalenko",
+      "displayDate": "22 березня о 09:00",
+      "type": "task",
+      "taskType": "comparison",
+      "difficulty": 2,
+      "topic": "suchasnist",
+      "content": {
+        "text": "Порівняйте два підходи до викладання теми «Холодна війна»: 1) як конфлікт двох наддержав; 2) як глобальний процес, що вплинув на весь світ. Який підхід більш коректний методично? Складіть план уроку за обраним підходом.",
+        "attachment": null
+      },
+      "methodologicalFocus": "Глобальна vs. біполярна перспектива",
+      "points": 15,
+      "prerequisites": [],
+      "unlocks": []
+    },
+    {
+      "id": "su-003",
+      "authorId": "student-olha",
+      "displayDate": "21 березня о 19:20",
+      "type": "task",
+      "taskType": "debate",
+      "difficulty": 2,
+      "topic": "suchasnist",
+      "content": {
+        "text": "Дискусійне питання: чи можна викладати сучасну історію (події після 1991 року) об'єктивно, коли ми самі є її учасниками? Які методичні принципи допоможуть вчителю зберегти баланс? Обговорімо!",
+        "attachment": null
+      },
+      "methodologicalFocus": "Об'єктивність у викладанні сучасної історії",
+      "points": 15,
+      "prerequisites": [],
+      "unlocks": []
+    },
+    {
+      "id": "su-004",
+      "authorId": "prof-kovalenko",
+      "displayDate": "20 березня о 11:00",
+      "type": "task",
+      "taskType": "map-work",
+      "difficulty": 1,
+      "topic": "suchasnist",
+      "content": {
+        "text": "Завдання з картографії: використовуючи контурну карту Європи, покажіть зміни кордонів після розпаду СРСР (1991). Які методичні прийоми роботи з картою ви б застосували на уроці? Як карта допомагає учням зрозуміти геополітичні зміни?",
+        "attachment": null
+      },
+      "methodologicalFocus": "Картографічний метод у навчанні історії",
+      "points": 10,
+      "prerequisites": [],
+      "unlocks": []
+    }
+  ]
+}
