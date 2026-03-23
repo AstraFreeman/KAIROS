@@ -1,0 +1,220 @@
+/* ===========================================
+   KAIROS — Landing Page Hybrid Feed
+   =========================================== */
+
+/* --- Hero Section --- */
+.landing-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.landing-hero h2 {
+  color: #3a3a5c;
+  margin-bottom: 0.3rem;
+}
+
+.landing-hero p {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* --- Feed Container --- */
+.landing-feed {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.landing-feed .loading-msg {
+  text-align: center;
+  padding: 30px;
+  color: #999;
+  font-size: 0.95rem;
+}
+
+/* --- Post Cards (Facebook 2010 style) --- */
+.landing-feed .post-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  font-family: 'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.landing-feed .post-card a {
+  color: #3b5998;
+  text-decoration: none;
+}
+
+.landing-feed .post-card a:hover {
+  text-decoration: underline;
+}
+
+.landing-feed .post-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.landing-feed .post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background: #e9eaed;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.landing-feed .post-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.landing-feed .post-author-info {
+  flex: 1;
+}
+
+.landing-feed .post-author-name {
+  font-weight: bold;
+  color: #3b5998;
+  font-size: 13px;
+}
+
+.landing-feed .post-author-role {
+  font-size: 11px;
+  color: #999;
+}
+
+.landing-feed .post-timestamp {
+  font-size: 11px;
+  color: #999;
+}
+
+.landing-feed .post-body {
+  padding: 0 12px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.landing-feed .post-task-label {
+  display: inline-block;
+  background: #ecf3ff;
+  color: #3b5998;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-bottom: 6px;
+}
+
+.landing-feed .post-difficulty {
+  display: inline-block;
+  font-size: 11px;
+  color: #999;
+  margin-left: 6px;
+}
+
+.landing-feed .post-attachment {
+  margin: 8px 0;
+  padding: 10px;
+  background: #f6f7f8;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  font-style: italic;
+  font-size: 12px;
+  color: #555;
+}
+
+.landing-feed .post-footer {
+  border-top: 1px solid #e5e5e5;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #999;
+}
+
+.landing-feed .post-footer a {
+  font-weight: bold;
+}
+
+/* --- Era Advertisement Cards --- */
+.landing-feed .post-card.era-ad {
+  border-left: 4px solid var(--era-color, #3b5998);
+}
+
+.landing-feed .era-ad-banner {
+  width: 100%;
+  height: 140px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.landing-feed .era-ad-desc {
+  font-size: 11px;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.landing-feed .era-ad-cta {
+  display: inline-block;
+  background: #4267b2;
+  color: #fff;
+  padding: 7px 18px;
+  border-radius: 3px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.landing-feed .era-ad-cta:hover {
+  background: #365899;
+  text-decoration: none;
+}
+
+.landing-feed .sponsored-label {
+  font-size: 11px;
+  color: #bbb;
+}
+
+/* --- CTA Button --- */
+.cta-section {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.cta-button {
+  display: inline-block;
+  background: #3a3a5c;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.cta-button:hover {
+  background: #2a2a4c;
+  text-decoration: none;
+}
+
+/* --- Responsive --- */
+@media (max-width: 720px) {
+  .landing-feed {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .landing-feed .era-ad-banner {
+    height: 100px;
+    font-size: 36px;
+  }
+}

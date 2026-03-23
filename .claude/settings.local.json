@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(find 'D:/Корн_новий/Робоча25 зе плафторм/KAIROS/data/posts' -type f -name *.json)",
+      "Bash(find 'D:/Корн_новий/Робоча25 зе плафторм/KAIROS/js' -type f -name *.js)",
+      "Bash(find 'D:/Корн_новий/Робоча25 зе плафторм/KAIROS/pages' -type f -name *.html)",
+      "Bash(find 'D:/Корн_новий/Робоча25 зе плафторм/KAIROS' -type f \\\\\\(-name *.html -o -name *.css -o -name *.js -o -name *.json \\\\\\))"
     ]
   }
 }

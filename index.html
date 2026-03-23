@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KAIROS — Платформа вивчення історії</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
 
@@ -24,45 +25,52 @@
 </nav>
 
 <main>
-  <h2 style="margin-bottom: 0.5rem; color: #3a3a5c;">Оберіть тему для вивчення</h2>
-
-  <div class="topics-grid">
-
-    <a href="pages/starodavnij-svit.html" class="topic-card">
-      <h2>Стародавній світ</h2>
-      <p>Єгипет, Месопотамія, Греція, Рим — витоки цивілізації та перші держави.</p>
-    </a>
-
-    <a href="pages/serednovichchya.html" class="topic-card">
-      <h2>Середньовіччя</h2>
-      <p>Феодалізм, хрестові походи, Візантія та становлення європейських націй.</p>
-    </a>
-
-    <a href="pages/novyj-chas.html" class="topic-card">
-      <h2>Новий час</h2>
-      <p>Великі географічні відкриття, Реформація, Просвітництво та революції.</p>
-    </a>
-
-    <a href="pages/moderna.html" class="topic-card">
-      <h2>Модерна доба</h2>
-      <p>Промислова революція, світові війни, формування сучасного світу.</p>
-    </a>
-
-    <a href="pages/suchasnist.html" class="topic-card">
-      <h2>Сучасність</h2>
-      <p>Холодна війна, глобалізація, незалежність України та виклики XXI століття.</p>
-    </a>
-
+  <div class="landing-hero">
+    <h2>Ваша стрічка історії</h2>
+    <p>Дописи від історичних постатей, завдання та рекомендації епох</p>
   </div>
 
-  <div style="text-align:center; margin:1.5rem 0;">
-    <a href="platform.html#feed" style="display:inline-block; background:#3a3a5c; color:#fff; padding:0.8rem 2rem; border-radius:8px; text-decoration:none; font-size:1.1rem; font-weight:600;">Розпочати навчання на платформі</a>
+  <div class="landing-feed" id="landing-feed">
+    <p class="loading-msg">Завантаження стрічки...</p>
+  </div>
+
+  <noscript>
+    <h2 style="margin-bottom: 0.5rem; color: #3a3a5c;">Оберіть тему для вивчення</h2>
+    <div class="topics-grid">
+      <a href="pages/starodavnij-svit.html" class="topic-card">
+        <h2>Стародавній світ</h2>
+        <p>Єгипет, Месопотамія, Греція, Рим — витоки цивілізації та перші держави.</p>
+      </a>
+      <a href="pages/serednovichchya.html" class="topic-card">
+        <h2>Середньовіччя</h2>
+        <p>Феодалізм, хрестові походи, Візантія та становлення європейських націй.</p>
+      </a>
+      <a href="pages/novyj-chas.html" class="topic-card">
+        <h2>Новий час</h2>
+        <p>Великі географічні відкриття, Реформація, Просвітництво та революції.</p>
+      </a>
+      <a href="pages/moderna.html" class="topic-card">
+        <h2>Модерна доба</h2>
+        <p>Промислова революція, світові війни, формування сучасного світу.</p>
+      </a>
+      <a href="pages/suchasnist.html" class="topic-card">
+        <h2>Сучасність</h2>
+        <p>Холодна війна, глобалізація, незалежність України та виклики XXI століття.</p>
+      </a>
+    </div>
+  </noscript>
+
+  <div class="cta-section">
+    <a href="platform.html#feed" class="cta-button">Перейти на повну платформу</a>
   </div>
 </main>
 
 <footer>
   &copy; 2026 KAIROS. Навчальна платформа.
 </footer>
+
+<script src="js/utils.js"></script>
+<script src="js/landing.js"></script>
 
 </body>
 </html>
