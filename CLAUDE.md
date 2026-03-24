@@ -32,8 +32,8 @@ Then open `http://localhost:8000`.
 The project has **three coexisting UI layers**:
 
 1. **Login page** (`index.html` + `css/login.css`) — Facebook 2010-style login screen. Inline JS only. Select dropdown uses narrative email logins (e.g., `Pharaoh_Scribe@nile.delta`). Password: `L0v3 H1sT0r` (hidden in top-right corner, same color as background). Successful login redirects to topic page or SPA feed.
-2. **Group pages** (`pages/*.html` + `css/style.css`) — styled as Facebook group pages. Each page has a color-coded cover gradient via `body` class (`era-starodavnij`, `era-serednovichchya`, `era-novyj-chas`, `era-moderna`, `era-suchasnist`). Structure: header, nav (8 links), group-cover, group-info, group-tabs, group-body, group-cta ("До стрічки"). No JS.
-3. **SPA shell** (`platform.html` + `css/kairos.css` + `js/*.js`) — a hash-router JS app. Routes: `#feed`, `#topic/<slug>`, `#profile/<id>`, `#my-profile`, `#achievements`, `#post/<id>`.
+2. **Group pages** (`pages/*.html` + `css/style.css`) — styled as Facebook group pages with community wall posts. Each page has a color-coded cover gradient via `body` class (`era-starodavnij`, `era-serednovichchya`, `era-novyj-chas`, `era-moderna`, `era-suchasnist`). Structure: header, nav (8 links), group-cover, group-info, group-tabs, group-posts (3 posts per page with facts and image placeholders), group-cta ("До стрічки"). No JS.
+3. **SPA shell** (`platform.html` + `css/kairos.css` + `js/*.js`) — a hash-router JS app. Routes: `#feed`, `#topic/<slug>`, `#profile/<id>`, `#my-profile`, `#achievements`, `#post/<id>`, `#cairo`.
 
 Layers are connected: login → topic pages or SPA; topic pages link to SPA via nav ("Платформа", "Особиста інформація") and "До стрічки" button; SPA sidebar links back to `index.html`.
 
@@ -47,6 +47,7 @@ Global namespace: `window.KAIROS`. Each module is an IIFE that attaches to `KAIR
 3. `ui.js` — DOM component builders: `postCard`, `likeButton`, `commentBox`, `profileMini`, `achievementCard`, `toast`, `modal`
 4. `achievements.js` — condition evaluator (`checkAll`) triggered after every tracker action
 5. `feed.js` — scoring/ranking algorithm for posts (weighted by unseen, difficulty match, topic diversity, prerequisites)
+6. `cairo.js` — "Форум Каїр" reflection zone: random quotes/facts/anecdotes from `data/cairo.json`, ambient music from `music/`, embedded puzzle game from `games/puzzle-phenikis.html`
 6. `profile.js` — profile page and "my profile" renderers
 7. `router.js` — hash-based router (`#route/param`)
 8. `app.js` — entry point: loads all JSON data, registers routes, renders shell, shows onboarding modal for new users

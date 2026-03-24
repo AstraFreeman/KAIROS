@@ -7,6 +7,8 @@ KAIROS.cairo = (function () {
 
   var items = [];
   var currentIndex = -1;
+  var musicFiles = ['music/Sam Brown - Stop.mp3'];
+  var audioEl = null;
 
   function init(data) {
     items = data.items || [];
@@ -21,9 +23,47 @@ KAIROS.cairo = (function () {
     return item;
   }
 
+  function startMusic() {
+    if (audioEl) return;
+    var src = musicFiles[Math.floor(Math.random() * musicFiles.length)];
+    audioEl = document.createElement('audio');
+    audioEl.src = src;
+    audioEl.loop = true;
+    audioEl.volume = 0.3;
+    audioEl.play().catch(function () {});
+  }
+
+  function stopMusic() {
+    if (audioEl) {
+      audioEl.pause();
+      audioEl = null;
+    }
+  }
+
+  function showGame(card) {
+    card.classList.remove('cairo-card-enter');
+    void card.offsetWidth;
+    card.classList.add('cairo-card-enter');
+
+    card.innerHTML =
+      '<div class="cairo-card-type">' +
+        '<span class="cairo-type-icon">&#x1F9E9;</span> Гра' +
+      '</div>' +
+      '<div class="cairo-card-text">Історичний пазл: видатні гетьмани</div>' +
+      '<div class="cairo-game-wrap">' +
+        '<iframe src="games/puzzle-phenikis.html" class="cairo-game-iframe"></iframe>' +
+      '</div>';
+  }
+
   function render(param, container) {
+    // Stop any previous music
+    stopMusic();
+
     container.innerHTML = '';
     container.className = 'cairo-zone';
+
+    // Start ambient music
+    startMusic();
 
     // Greeting
     var greeting = document.createElement('div');
@@ -34,12 +74,38 @@ KAIROS.cairo = (function () {
       '<p class="cairo-welcome">Залиште списи та сувої біля входу. Тут час зупиняється для роздумів.</p>';
     container.appendChild(greeting);
 
+    // Music controls
+    var musicCtrl = document.createElement('div');
+    musicCtrl.className = 'cairo-music-ctrl';
+    var muteBtn = document.createElement('button');
+    muteBtn.className = 'cairo-mute-btn';
+    muteBtn.textContent = '\u266B Вимкнути музику';
+    var muted = false;
+    muteBtn.addEventListener('click', function () {
+      muted = !muted;
+      if (muted) {
+        stopMusic();
+        muteBtn.textContent = '\u266B Увімкнути музику';
+      } else {
+        startMusic();
+        muteBtn.textContent = '\u266B Вимкнути музику';
+      }
+    });
+    musicCtrl.appendChild(muteBtn);
+    container.appendChild(musicCtrl);
+
     // Card area
     var card = document.createElement('div');
     card.className = 'cairo-card';
     container.appendChild(card);
 
     function showItem() {
+      // ~20% chance to show the game instead
+      if (Math.random() < 0.2) {
+        showGame(card);
+        return;
+      }
+
       var item = getNext();
       if (!item) {
         card.innerHTML = '<p class="cairo-empty">Поки що тут порожньо...</p>';
@@ -47,7 +113,6 @@ KAIROS.cairo = (function () {
       }
 
       card.classList.remove('cairo-card-enter');
-      // force reflow for re-triggering animation
       void card.offsetWidth;
       card.classList.add('cairo-card-enter');
 
@@ -70,15 +135,34 @@ KAIROS.cairo = (function () {
 
     showItem();
 
-    // "Next" button
+    // Action buttons
     var btnWrap = document.createElement('div');
     btnWrap.className = 'cairo-actions';
+
     var btn = document.createElement('button');
     btn.className = 'cairo-next-btn';
     btn.textContent = 'Ще одна';
     btn.addEventListener('click', showItem);
     btnWrap.appendChild(btn);
+
+    var gameBtn = document.createElement('button');
+    gameBtn.className = 'cairo-next-btn';
+    gameBtn.textContent = '\uD83E\uDDE9 Зіграти в пазл';
+    gameBtn.addEventListener('click', function () {
+      showGame(card);
+    });
+    btnWrap.appendChild(gameBtn);
+
     container.appendChild(btnWrap);
+
+    // Stop music when navigating away
+    window.addEventListener('hashchange', function onLeave() {
+      if (window.location.hash !== '#cairo') {
+        stopMusic();
+        container.className = '';
+        window.removeEventListener('hashchange', onLeave);
+      }
+    });
   }
 
   return {

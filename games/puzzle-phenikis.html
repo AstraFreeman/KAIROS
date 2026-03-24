@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Історичний пазл: видатні гетьмани</title>
+    <link rel="stylesheet" href="../../shared/css/reset.css">
+    <link rel="stylesheet" href="../../shared/css/theme.css">
+    <link rel="stylesheet" href="../../shared/css/animations.css">
+    <style>
+        :root {
+            --cell-size: calc(400px / 3);
+            --accent: #e8c97a;
+            --surface: #16161a;
+            --border: #2a2a32;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            --game-accent: #e8c97a;
+        }
+
+        /* ── Game container ── */
+        #gameContainer {
+            position: relative;
+            width: 94vw;
+            max-width: 900px;
+            min-height: 94vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ── Background glow ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 40% at 20% 20%, rgba(232,201,122,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 60% at 80% 80%, rgba(100,80,200,0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── HUD ── */
+        #hud {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        #hud span {
+            color: var(--color-text-primary);
+            font-size: var(--text-sm);
+            font-weight: 600;
+        }
+
+        #hudTitle {
+            color: var(--accent) !important;
+        }
+
+        /* ── Clue banner ── */
+        #clueBanner {
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+            padding: 14px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            z-index: 10;
+        }
+
+        #clueBanner .clue-question {
+            color: var(--accent);
+            font-size: var(--text-lg);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        #clueBanner .clue-hint {
+            color: var(--color-text-secondary);
+            font-size: var(--text-sm);
+            line-height: 1.5;
+        }
+
+        /* ── Game area: board + tray ── */
+        .game-area {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        /* ── PUZZLE BOARD ── */
+        .board-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .board-label {
+            font-size: var(--text-xs);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            opacity: 0.35;
+            color: var(--color-text-secondary);
+        }
+
+        #board {
+            width: 400px;
+            height: 400px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            border: 1px solid var(--border);
+            position: relative;
+            background: var(--surface);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 20px 60px rgba(0,0,0,0.6);
+            overflow: visible;
+            border-radius: var(--radius-sm);
+            margin: 0 auto;
+        }
+
+        .cell {
+            width: var(--cell-size);
+            height: var(--cell-size);
+            border: 1px solid var(--border);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, border-color 0.2s;
+            overflow: visible;
+        }
+
+        .cell[data-index="1"] { z-index: 1; }
+        .cell[data-index="2"] { z-index: 2; }
+        .cell[data-index="3"] { z-index: 3; }
+        .cell[data-index="4"] { z-index: 4; }
+        .cell[data-index="5"] { z-index: 5; }
+        .cell[data-index="6"] { z-index: 6; }
+        .cell[data-index="7"] { z-index: 7; }
+        .cell[data-index="8"] { z-index: 8; }
+        .cell[data-index="9"] { z-index: 9; }
+
+        .cell.drag-over {
+            background: rgba(232,201,122,0.08);
+            border-color: rgba(232,201,122,0.4);
+        }
+
+        .cell-num {
+            font-size: var(--text-xs);
+            opacity: 0.15;
+            pointer-events: none;
+            user-select: none;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--color-text-muted);
+        }
+
+        /* ── PIECE TRAY ── */
+        .tray-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #tray {
+            width: 240px;
+            min-height: 600px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        /* ── PIECES ── */
+        #tray .piece {
+            width: calc(var(--cell-size) * 1.4);
+            height: calc(var(--cell-size) * 1.4);
+            cursor: grab;
+            position: relative;
+            flex-shrink: 0;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        #tray .piece img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .cell .piece {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            cursor: grab;
+            pointer-events: none;
+            overflow: visible;
+            z-index: inherit;
+        }
+
+        .cell .piece img {
+            width: auto;
+            height: auto;
+            display: block;
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-drag: none;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            max-width: calc(var(--cell-size) * 1.7);
+            max-height: calc(var(--cell-size) * 1.7);
+        }
+
+        .cell .piece:hover,
+        #tray .piece:hover {
+            z-index: 20 !important;
+        }
+
+        #tray .piece:hover {
+            transform: scale(1.04);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(232,201,122,0.3);
+        }
+
+        .piece.dragging {
+            opacity: 0.3 !important;
+            cursor: grabbing;
+        }
+
+        /* ── Reset button ── */
+        #resetBtn {
+            margin-top: 10px;
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--color-text-secondary);
+            font-size: var(--text-xs);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        #resetBtn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── Progress counter ── */
+        #progress {
+            font-size: var(--text-xs);
+            letter-spacing: 0.25em;
+            opacity: 0.4;
+            font-weight: 300;
+            margin-top: 8px;
+            color: var(--color-text-secondary);
+        }
+
+        #progress span {
+            color: var(--accent);
+            opacity: 1;
+        }
+
+        /* ── OVERLAY PANELS ── */
+        .overlay-panel {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(15, 15, 26, 0.94);
+            backdrop-filter: blur(16px);
+            z-index: var(--z-modal);
+            padding: 6%;
+            text-align: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .overlay-panel.hidden {
+            display: none !important;
+        }
+
+        .overlay-panel h2 {
+            color: var(--accent);
+            font-size: var(--text-3xl);
+            margin-bottom: var(--space-md);
+        }
+
+        .overlay-panel p {
+            color: var(--color-text-secondary);
+            font-size: var(--text-base);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: var(--space-md);
+        }
+
+        .btn-primary {
+            padding: 14px 44px;
+            font-size: var(--text-lg);
+            font-weight: 700;
+            background: linear-gradient(135deg, #e8c97a 0%, #c9a84c 100%);
+            color: #0f0f1a;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(232,201,122,0.3);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 28px rgba(232,201,122,0.5);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        /* ── Intro panel ── */
+        .instructions-list {
+            text-align: left;
+            max-width: 480px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .instructions-list li {
+            color: var(--color-text-secondary);
+            font-size: var(--text-sm);
+            padding: 4px 0;
+            line-height: 1.5;
+        }
+
+        .instructions-list li::before {
+            content: "\25B8 ";
+            color: var(--accent);
+        }
+
+        /* ── Success overlay (inside board) ── */
+        #successOverlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        #board.solved #successOverlay {
+            display: flex;
+        }
+
+        #board.solved .cell {
+            border-color: transparent;
+        }
+
+        #successImg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: revealImg 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes revealImg {
+            from { opacity: 0; transform: scale(1.06); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* ── Completion panel (between puzzles) ── */
+        #completionPanel {
+            background: rgba(15, 15, 26, 0.96);
+        }
+
+        #completionPanel .portrait-frame {
+            width: 220px;
+            height: 220px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 2px solid var(--accent);
+            box-shadow: 0 8px 40px rgba(232,201,122,0.2);
+            margin-bottom: var(--space-lg);
+        }
+
+        #completionPanel .portrait-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .year-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            color: var(--color-text-secondary);
+            font-size: var(--text-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .description-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg) var(--space-xl);
+            max-width: 560px;
+            margin-bottom: var(--space-xl);
+        }
+
+        .description-box p {
+            color: var(--color-text-primary) !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* ── Victory panel ── */
+        #victoryPanel h2 {
+            font-size: var(--text-4xl);
+        }
+
+        .summary-list {
+            padding: 0;
+            margin: var(--space-md) 0 var(--space-xl);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .summary-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            color: var(--color-text-primary);
+            font-size: var(--text-sm);
+        }
+
+        .summary-list li span.year {
+            color: var(--color-text-muted);
+            font-size: var(--text-xs);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 700px) {
+            :root {
+                --cell-size: calc(min(85vw, 360px) / 3);
+            }
+
+            #board {
+                width: min(85vw, 360px);
+                height: min(85vw, 360px);
+            }
+
+            .game-area {
+                flex-direction: column-reverse;
+                gap: 20px;
+            }
+
+            #tray {
+                width: min(90vw, 400px);
+                min-height: auto;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 8px;
+            }
+
+            #tray .piece {
+                width: calc(var(--cell-size) * 1.1);
+                height: calc(var(--cell-size) * 1.1);
+            }
+
+            .tray-wrapper {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body data-nav="overlay" data-home-url="../../index.html" data-section="Ігри" data-game-title="Історичний пазл">
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+        <span id="hudTitle">Пазл 1/3: Мазепа</span>
+        <span id="hudCounter">Розміщено: 0 / 9</span>
+    </div>
+
+    <!-- Clue banner -->
+    <div id="clueBanner" class="hidden">
+        <div class="clue-question">Яку особистість ви збираєте?</div>
+        <div class="clue-hint" id="clueHint"></div>
+    </div>
+
+    <div id="gameContainer" class="hidden">
+        <div class="game-area">
+            <!-- PIECE TRAY -->
+            <div class="tray-wrapper">
+                <div class="board-label">Деталі</div>
+                <div id="tray"></div>
+                <button id="resetBtn">&#8634; Скинути</button>
+            </div>
+
+            <!-- BOARD -->
+            <div class="board-wrapper">
+                <div class="board-label">Поле</div>
+                <div id="board">
+                    <div id="successOverlay">
+                        <img id="successImg" src="" alt="Портрет">
+                    </div>
+                </div>
+                <div id="progress">Розміщено: <span id="placedCount">0</span> / 9</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── INTRO PANEL ── -->
+    <div class="overlay-panel" id="introPanel">
+        <h2>Історичний пазл</h2>
+        <p>Складіть три пазли з портретами видатних діячів української історії. Після кожного дізнаєтесь більше про цю постать.</p>
+        <ul class="instructions-list">
+            <li>Перетягуйте фрагменти на правильні місця в сітці 3&times;3</li>
+            <li>Фрагмент стає на місце, коли потрапляє у правильну клітинку</li>
+            <li>Підтримується керування мишкою та дотиком</li>
+            <li>Після кожного пазла ви побачите портрет та історичну довідку</li>
+        </ul>
+        <button class="btn-primary" id="btnStart">Почати гру</button>
+    </div>
+
+    <!-- ── COMPLETION PANEL (between puzzles) ── -->
+    <div class="overlay-panel hidden" id="completionPanel">
+        <div class="portrait-frame">
+            <img id="completionPortrait" src="" alt="Портрет">
+        </div>
+        <h2 id="completionName"></h2>
+        <span class="year-badge" id="completionYear"></span>
+        <div class="description-box">
+            <p id="completionDesc"></p>
+        </div>
+        <button class="btn-primary" id="btnNext">Наступний пазл</button>
+    </div>
+
+    <!-- ── VICTORY PANEL ── -->
+    <div class="overlay-panel hidden" id="victoryPanel">
+        <h2>Вітаємо!</h2>
+        <p>Ви успішно склали всі три пазли та дізналися про видатних діячів української історії.</p>
+        <ul class="summary-list" id="summaryList"></ul>
+        <button class="btn-primary" id="btnReplay">Грати знову</button>
+    </div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* ============================
+         *  PUZZLE DATA
+         * ============================ */
+        var PUZZLES = [
+            {
+                id: 'MZP',
+                name: 'Іван Мазепа',
+                years: '1639–1709',
+                clue: 'Гетьман Лівобережної України, меценат. Уклав союз із Карлом XII.',
+                description: 'Іван Мазепа (1639-1709) — гетьман Лівобережної України, меценат, будівничий храмів. Відомий спробою здобути незалежність від Московії, уклавши союз зі шведським королем Карлом XII.',
+                prefix: 'MZP',
+                portrait: '../data/games/pheniks_2/MZP_0.jpg'
+            },
+            {
+                id: 'PTL',
+                name: 'Симон Петлюра',
+                years: '1879–1926',
+                clue: 'Голова Директорії УНР, борець за незалежність під час Визвольних змагань.',
+                description: 'Симон Петлюра (1879-1926) — голова Директорії УНР, борець за українську незалежність. Очолював збройні сили під час Визвольних змагань 1917-1921 років.',
+                prefix: 'PTL',
+                portrait: '../data/games/pheniks_2/PTL_0.jpg'
+            },
+            {
+                id: 'SGD',
+                name: 'Петро Сагайдачний',
+                years: '1570–1622',
+                clue: 'Гетьман реєстрового козацтва, здійснив похід на Кафу 1616 року.',
+                description: 'Петро Конашевич-Сагайдачний (1570-1622) — гетьман реєстрового козацтва, визначний полководець. Здійснив успішний похід на Кафу (1616), визволивши тисячі полонених.',
+                prefix: 'SGD',
+                portrait: '../data/games/pheniks_2/SGD_0.jpg'
+            }
+        ];
+
+        var TOTAL_PIECES = 9;
+        var currentPuzzleIndex = 0;
+
+        /* ============================
+         *  DOM REFERENCES
+         * ============================ */
+        var board = document.getElementById('board');
+        var tray = document.getElementById('tray');
+        var hud = document.getElementById('hud');
+        var hudTitle = document.getElementById('hudTitle');
+        var hudCounter = document.getElementById('hudCounter');
+        var clueBanner = document.getElementById('clueBanner');
+        var clueHint = document.getElementById('clueHint');
+        var gameContainer = document.getElementById('gameContainer');
+        var placedCountEl = document.getElementById('placedCount');
+        var successOverlay = document.getElementById('successOverlay');
+        var successImg = document.getElementById('successImg');
+        var introPanel = document.getElementById('introPanel');
+        var completionPanel = document.getElementById('completionPanel');
+        var completionPortrait = document.getElementById('completionPortrait');
+        var completionName = document.getElementById('completionName');
+        var completionYear = document.getElementById('completionYear');
+        var completionDesc = document.getElementById('completionDesc');
+        var victoryPanel = document.getElementById('victoryPanel');
+        var summaryList = document.getElementById('summaryList');
+        var btnStart = document.getElementById('btnStart');
+        var btnNext = document.getElementById('btnNext');
+        var btnReplay = document.getElementById('btnReplay');
+        var resetBtn = document.getElementById('resetBtn');
+
+        var cells = [];
+        var dragged = null;
+        var dragOrigin = null;
+
+        /* ============================
+         *  BUILD BOARD CELLS
+         * ============================ */
+        function buildCells() {
+            // Remove old cells (keep successOverlay)
+            var oldCells = board.querySelectorAll('.cell');
+            for (var i = 0; i < oldCells.length; i++) {
+                board.removeChild(oldCells[i]);
+            }
+            cells = [];
+
+            for (var j = 1; j <= TOTAL_PIECES; j++) {
+                var cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = String(j);
+                var num = document.createElement('span');
+                num.className = 'cell-num';
+                num.textContent = String(j);
+                cell.appendChild(num);
+                board.appendChild(cell);
+                cells.push(cell);
+            }
+        }
+
+        /* ============================
+         *  BUILD PIECES INTO TRAY
+         * ============================ */
+        function buildPieces(puzzle) {
+            // Clear tray
+            while (tray.firstChild) {
+                tray.removeChild(tray.firstChild);
+            }
+
+            // Build ALL 27 pieces from all 3 sets
+            var allPieceData = [];
+            PUZZLES.forEach(function(p) {
+                for (var i = 1; i <= 9; i++) {
+                    allPieceData.push({
+                        piece: i,
+                        prefix: p.prefix,
+                        setId: p.id,
+                        name: p.name
+                    });
+                }
+            });
+
+            var order = shuffle(allPieceData);
+
+            order.forEach(function (pd) {
+                var div = document.createElement('div');
+                div.className = 'piece';
+                div.dataset.piece = String(pd.piece);
+                div.dataset.set = pd.setId;
+
+                var img = document.createElement('img');
+                img.src = '../data/games/pheniks_2/' + pd.prefix + '_' + pd.piece + '.png';
+                img.alt = pd.name + ' — фрагмент ' + pd.piece;
+                img.draggable = false;
+                div.appendChild(img);
+                tray.appendChild(div);
+            });
+        }
+
+        /* ============================
+         *  START A PUZZLE
+         * ============================ */
+        function startPuzzle(index) {
+            if (index === 0) {
+                if (window.HLGAnalytics) HLGAnalytics.startSession('puzzle-phenikis');
+            }
+            currentPuzzleIndex = index;
+            var puzzle = PUZZLES[index];
+
+            // Reset board state
+            board.classList.remove('solved');
+
+            // Build DOM
+            buildCells();
+            buildPieces(puzzle);
+
+            // Set success image
+            successImg.src = puzzle.portrait;
+
+            // Update HUD
+            hudTitle.textContent = 'Пазл ' + (index + 1) + '/3: ' + puzzle.name;
+            placedCountEl.textContent = '0';
+            hudCounter.textContent = 'Розміщено: 0 / 9';
+
+            // Update clue
+            clueHint.textContent = puzzle.clue;
+
+            // Show game UI
+            hud.classList.remove('hidden');
+            clueBanner.classList.remove('hidden');
+            gameContainer.classList.remove('hidden');
+        }
+
+        /* ============================
+         *  DRAG & DROP — MOUSE
+         * ============================ */
+        document.addEventListener('mousedown', onMouseDown);
+
+        function onMouseDown(e) {
+            var piece = e.target.closest('.piece');
+            if (!piece) return;
+            e.preventDefault();
+
+            dragged = piece;
+            dragOrigin = piece.parentElement;
+
+            // Measure the rendered image for ghost sizing
+            var img = piece.querySelector('img');
+            var imgRect = img ? img.getBoundingClientRect() : piece.getBoundingClientRect();
+            var gw = imgRect.width;
+            var gh = imgRect.height;
+
+            // Create ghost
+            var ghost = document.createElement('div');
+            ghost.id = 'drag-ghost';
+            ghost.style.cssText =
+                'position:fixed;pointer-events:none;z-index:9999;' +
+                'width:' + gw + 'px;height:' + gh + 'px;' +
+                'opacity:0.85;transform:scale(1.06) rotate(-1deg);' +
+                'top:0;left:0;overflow:visible;';
+
+            var ghostImg = document.createElement('img');
+            ghostImg.src = img.src;
+            ghostImg.style.cssText =
+                'width:' + gw + 'px;height:' + gh + 'px;display:block;pointer-events:none;' +
+                'filter:drop-shadow(0 12px 30px rgba(0,0,0,0.7));';
+            ghost.appendChild(ghostImg);
+            document.body.appendChild(ghost);
+            moveGhost(ghost, e.clientX, e.clientY, gw, gh);
+
+            piece.classList.add('dragging');
+
+            function onMouseMove(ev) {
+                moveGhost(ghost, ev.clientX, ev.clientY, gw, gh);
+                highlightCell(ev.clientX, ev.clientY);
+            }
+
+            function onMouseUp(ev) {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+                ghost.remove();
+                piece.classList.remove('dragging');
+                clearHighlights();
+                dropPiece(piece, ev.clientX, ev.clientY);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        /* ============================
+         *  DRAG & DROP — TOUCH
+         * ============================ */
+        document.addEventListener('touchstart', onTouchStart, { passive: false });
+
+        function onTouchStart(e) {
+            var piece = e.target.closest('.piece');
+            if (!piece) return;
+            e.preventDefault();
+
+            dragged = piece;
+            dragOrigin = piece.parentElement;
+
+            var img = piece.querySelector('img');
+            var imgRect = img ? img.getBoundingClientRect() : piece.getBoundingClientRect();
+            var gw = imgRect.width;
+            var gh = imgRect.height;
+
+            var ghost = document.createElement('div');
+            ghost.id = 'drag-ghost';
+            ghost.style.cssText =
+                'position:fixed;pointer-events:none;z-index:9999;' +
+                'width:' + gw + 'px;height:' + gh + 'px;' +
+                'opacity:0.85;transform:scale(1.06) rotate(-1deg);' +
+                'top:0;left:0;overflow:visible;';
+
+            var ghostImg = document.createElement('img');
+            ghostImg.src = img.src;
+            ghostImg.style.cssText =
+                'width:' + gw + 'px;height:' + gh + 'px;display:block;pointer-events:none;' +
+                'filter:drop-shadow(0 12px 30px rgba(0,0,0,0.7));';
+            ghost.appendChild(ghostImg);
+            document.body.appendChild(ghost);
+            piece.classList.add('dragging');
+
+            function onTouchMove(ev) {
+                ev.preventDefault();
+                var t = ev.touches[0];
+                moveGhost(ghost, t.clientX, t.clientY, gw, gh);
+                highlightCell(t.clientX, t.clientY);
+            }
+
+            function onTouchEnd(ev) {
+                document.removeEventListener('touchmove', onTouchMove);
+                document.removeEventListener('touchend', onTouchEnd);
+                ghost.remove();
+                piece.classList.remove('dragging');
+                clearHighlights();
+
+                var t = ev.changedTouches[0];
+                dropPiece(piece, t.clientX, t.clientY);
+            }
+
+            document.addEventListener('touchmove', onTouchMove, { passive: false });
+            document.addEventListener('touchend', onTouchEnd);
+        }
+
+        /* ============================
+         *  SHARED DRAG HELPERS
+         * ============================ */
+        function moveGhost(ghost, cx, cy, w, h) {
+            ghost.style.left = (cx - w / 2) + 'px';
+            ghost.style.top = (cy - h / 2) + 'px';
+        }
+
+        function cellFromPoint(x, y) {
+            var ghost = document.getElementById('drag-ghost');
+            if (ghost) ghost.style.display = 'none';
+            var el = document.elementFromPoint(x, y);
+            if (ghost) ghost.style.display = '';
+            if (!el) return null;
+            return el.closest('.cell');
+        }
+
+        function highlightCell(x, y) {
+            clearHighlights();
+            var target = cellFromPoint(x, y);
+            if (target) target.classList.add('drag-over');
+        }
+
+        function clearHighlights() {
+            cells.forEach(function (c) { c.classList.remove('drag-over'); });
+        }
+
+        function dropPiece(piece, x, y) {
+            var target = cellFromPoint(x, y);
+
+            if (target) {
+                // If target cell already has a piece, swap back
+                var existing = target.querySelector('.piece');
+                if (existing) {
+                    dragOrigin.appendChild(existing);
+                }
+                target.appendChild(piece);
+            } else {
+                // Return to origin
+                dragOrigin.appendChild(piece);
+            }
+
+            dragged = null;
+            dragOrigin = null;
+            updateProgress();
+        }
+
+        /* ============================
+         *  PROGRESS & WIN CHECK
+         * ============================ */
+        function updateProgress() {
+            var placed = 0;
+            var solved = true;
+            var currentPuzzle = PUZZLES[currentPuzzleIndex];
+
+            cells.forEach(function (cell, i) {
+                var piece = cell.querySelector('.piece');
+                if (piece) {
+                    placed++;
+                    var pieceNum = parseInt(piece.dataset.piece, 10);
+                    var pieceSet = piece.dataset.set;
+                    if (pieceSet !== currentPuzzle.id || pieceNum !== i + 1) {
+                        solved = false;
+                    }
+                } else {
+                    solved = false;
+                }
+            });
+
+            placedCountEl.textContent = String(placed);
+            hudCounter.textContent = 'Розміщено: ' + placed + ' / 9';
+
+            if (placed === TOTAL_PIECES && solved) {
+                setTimeout(function () {
+                    onPuzzleSolved();
+                }, 400);
+            }
+        }
+
+        function onPuzzleSolved() {
+            board.classList.add('solved');
+
+            // After a brief moment showing the portrait on the board, show completion panel
+            setTimeout(function () {
+                showCompletion();
+            }, 1200);
+        }
+
+        /* ============================
+         *  COMPLETION & FLOW
+         * ============================ */
+        function showCompletion() {
+            var puzzle = PUZZLES[currentPuzzleIndex];
+
+            completionPortrait.src = puzzle.portrait;
+            completionName.textContent = puzzle.name;
+            completionYear.textContent = puzzle.years;
+            completionDesc.textContent = puzzle.description;
+
+            var isLast = currentPuzzleIndex >= PUZZLES.length - 1;
+            btnNext.textContent = isLast ? 'Результати' : 'Наступний пазл';
+
+            // Hide game UI
+            hud.classList.add('hidden');
+            clueBanner.classList.add('hidden');
+            gameContainer.classList.add('hidden');
+
+            completionPanel.classList.remove('hidden');
+        }
+
+        function showVictory() {
+            if (window.HLGAnalytics) HLGAnalytics.endSession({score: PUZZLES.length, won: true});
+            // Clear and rebuild summary list
+            while (summaryList.firstChild) {
+                summaryList.removeChild(summaryList.firstChild);
+            }
+
+            PUZZLES.forEach(function (p) {
+                var li = document.createElement('li');
+                var nameSpan = document.createElement('span');
+                nameSpan.textContent = p.name;
+                var yearSpan = document.createElement('span');
+                yearSpan.className = 'year';
+                yearSpan.textContent = p.years;
+                li.appendChild(nameSpan);
+                li.appendChild(yearSpan);
+                summaryList.appendChild(li);
+            });
+
+            victoryPanel.classList.remove('hidden');
+        }
+
+        /* ============================
+         *  RESET BUTTON
+         * ============================ */
+        resetBtn.addEventListener('click', function () {
+            board.classList.remove('solved');
+
+            // Move all pieces from cells back to tray
+            cells.forEach(function (cell) {
+                var p = cell.querySelector('.piece');
+                if (p) tray.appendChild(p);
+            });
+
+            // Re-shuffle tray children
+            var pieces = Array.prototype.slice.call(tray.querySelectorAll('.piece'));
+            shuffle(pieces).forEach(function (p) { tray.appendChild(p); });
+
+            placedCountEl.textContent = '0';
+            hudCounter.textContent = 'Розміщено: 0 / 9';
+        });
+
+        /* ============================
+         *  BUTTON HANDLERS
+         * ============================ */
+        btnStart.addEventListener('click', function () {
+            introPanel.classList.add('hidden');
+            startPuzzle(0);
+        });
+
+        btnNext.addEventListener('click', function () {
+            completionPanel.classList.add('hidden');
+
+            if (currentPuzzleIndex >= PUZZLES.length - 1) {
+                showVictory();
+            } else {
+                startPuzzle(currentPuzzleIndex + 1);
+            }
+        });
+
+        btnReplay.addEventListener('click', function () {
+            victoryPanel.classList.add('hidden');
+            startPuzzle(0);
+        });
+
+        /* ============================
+         *  HELPERS
+         * ============================ */
+        function shuffle(arr) {
+            var a = arr.slice();
+            for (var i = a.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var tmp = a[i];
+                a[i] = a[j];
+                a[j] = tmp;
+            }
+            return a;
+        }
+
+        /* ============================
+         *  PRELOAD IMAGES
+         * ============================ */
+        (function preload() {
+            PUZZLES.forEach(function (p) {
+                // Preload portrait
+                var img0 = new Image();
+                img0.src = p.portrait;
+
+                // Preload pieces
+                for (var i = 1; i <= 9; i++) {
+                    var imgN = new Image();
+                    imgN.src = '../data/games/pheniks_2/' + p.prefix + '_' + i + '.png';
+                }
+            });
+        })();
+
+    })();
+    </script>
+</body>
+</html>
