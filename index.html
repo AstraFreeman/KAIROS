@@ -3,74 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KAIROS — Платформа вивчення історії</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/landing.css">
+  <title>KAIROS — Вхід</title>
+  <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-
-<header>
-  <h1>KAIROS</h1>
-  <p>Інтерактивна платформа для вивчення історії</p>
-</header>
-
-<nav>
-  <a href="index.html" class="active">Головна</a>
-  <a href="pages/starodavnij-svit.html">Стародавній світ</a>
-  <a href="pages/serednovichchya.html">Середньовіччя</a>
-  <a href="pages/novyj-chas.html">Новий час</a>
-  <a href="pages/moderna.html">Модерна доба</a>
-  <a href="pages/suchasnist.html">Сучасність</a>
-  <a href="platform.html#feed">Платформа</a>
-</nav>
-
-<main>
-  <div class="landing-hero">
-    <h2>Ваша стрічка історії</h2>
-    <p>Дописи від історичних постатей, завдання та рекомендації епох</p>
-  </div>
-
-  <div class="landing-feed" id="landing-feed">
-    <p class="loading-msg">Завантаження стрічки...</p>
-  </div>
-
-  <noscript>
-    <h2 style="margin-bottom: 0.5rem; color: #3a3a5c;">Оберіть тему для вивчення</h2>
-    <div class="topics-grid">
-      <a href="pages/starodavnij-svit.html" class="topic-card">
-        <h2>Стародавній світ</h2>
-        <p>Єгипет, Месопотамія, Греція, Рим — витоки цивілізації та перші держави.</p>
-      </a>
-      <a href="pages/serednovichchya.html" class="topic-card">
-        <h2>Середньовіччя</h2>
-        <p>Феодалізм, хрестові походи, Візантія та становлення європейських націй.</p>
-      </a>
-      <a href="pages/novyj-chas.html" class="topic-card">
-        <h2>Новий час</h2>
-        <p>Великі географічні відкриття, Реформація, Просвітництво та революції.</p>
-      </a>
-      <a href="pages/moderna.html" class="topic-card">
-        <h2>Модерна доба</h2>
-        <p>Промислова революція, світові війни, формування сучасного світу.</p>
-      </a>
-      <a href="pages/suchasnist.html" class="topic-card">
-        <h2>Сучасність</h2>
-        <p>Холодна війна, глобалізація, незалежність України та виклики XXI століття.</p>
-      </a>
+  <div class="login-page">
+    <div class="login-brand">
+      <h1>KAIROS</h1>
+      <p>Інтерактивна платформа для вивчення історії</p>
     </div>
-  </noscript>
-
-  <div class="cta-section">
-    <a href="platform.html#feed" class="cta-button">Перейти на повну платформу</a>
+    <div class="login-box">
+      <form id="login-form">
+        <label for="login-section">Логін</label>
+        <select id="login-section">
+          <option value="starodavnij-svit">Стародавній світ</option>
+          <option value="serednovichchya">Середньовіччя</option>
+          <option value="novyj-chas">Новий час</option>
+          <option value="moderna">Модерна доба</option>
+          <option value="suchasnist">Сучасність</option>
+          <option value="all">Усі теми</option>
+        </select>
+        <label for="login-password">Пароль</label>
+        <input type="password" id="login-password" placeholder="Введіть пароль">
+        <div id="login-error" class="login-error" hidden>
+          Невірний пароль. Спробуйте ще раз.
+        </div>
+        <button type="submit">Увійти</button>
+      </form>
+    </div>
+    <footer>&copy; 2026 KAIROS. Навчальна платформа.</footer>
   </div>
-</main>
 
-<footer>
-  &copy; 2026 KAIROS. Навчальна платформа.
-</footer>
-
-<script src="js/utils.js"></script>
-<script src="js/landing.js"></script>
-
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var password = document.getElementById('login-password').value;
+      var section = document.getElementById('login-section').value;
+      var error = document.getElementById('login-error');
+      if (password !== 'L0v3 H1sT0r') {
+        error.hidden = false;
+        return;
+      }
+      error.hidden = true;
+      if (section === 'all') {
+        window.location.href = 'platform.html#feed';
+      } else {
+        window.location.href = 'pages/' + section + '.html';
+      }
+    });
+  </script>
 </body>
 </html>
