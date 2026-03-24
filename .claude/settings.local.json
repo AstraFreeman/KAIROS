@@ -9,7 +9,10 @@
       "WebFetch(domain:localhost)",
       "Bash(curl -s http://localhost:8000/)",
       "Bash(curl -s http://localhost:8000/css/login.css)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(mv icon_s.png favicon-16.png)",
+      "Bash(mv icon_m.png favicon-32.png)",
+      "Bash(mv Icon_old.svg logo.svg)"
     ]
   }
 }
