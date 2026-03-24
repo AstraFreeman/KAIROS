@@ -119,6 +119,150 @@ main {
   text-decoration: underline;
 }
 
+/* === Group Page Layout === */
+
+.group-cover {
+  height: 200px;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.group-cover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.3));
+}
+
+.group-info {
+  background: #fff;
+  padding: 20px 24px 16px;
+  border-left: 1px solid #dddfe2;
+  border-right: 1px solid #dddfe2;
+}
+
+.group-info h2 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.group-meta {
+  font-size: 0.85rem;
+  color: #90949c;
+}
+
+.group-meta span {
+  margin-right: 16px;
+}
+
+.group-tabs {
+  background: #fff;
+  border: 1px solid #dddfe2;
+  border-top: none;
+  padding: 0 24px;
+  display: flex;
+  gap: 0;
+}
+
+.group-tabs a {
+  display: inline-block;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: #4b4f56;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.group-tabs a:hover {
+  color: #3b5998;
+}
+
+.group-tabs a.active {
+  color: #3b5998;
+  border-bottom-color: #3b5998;
+}
+
+.group-body {
+  background: #fff;
+  border: 1px solid #dddfe2;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 24px;
+}
+
+.group-body p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.group-description {
+  background: #f6f7f8;
+  border: 1px solid #dddfe2;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #4b4f56;
+}
+
+.group-cta {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.group-cta a {
+  display: inline-block;
+  background: #4267b2;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.group-cta a:hover {
+  background: #365899;
+}
+
+/* Per-era cover gradients */
+.era-starodavnij .group-cover { background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #1565c0 100%); }
+.era-serednovichchya .group-cover { background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 50%, #7b1fa2 100%); }
+.era-novyj-chas .group-cover { background: linear-gradient(135deg, #b71c1c 0%, #c62828 50%, #d32f2f 100%); }
+.era-moderna .group-cover { background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%); }
+.era-suchasnist .group-cover { background: linear-gradient(135deg, #e65100 0%, #ef6c00 50%, #f57c00 100%); }
+
+/* Per-era accent colors */
+.era-starodavnij .group-tabs a.active { color: #1a237e; border-bottom-color: #1a237e; }
+.era-serednovichchya .group-tabs a.active { color: #4a148c; border-bottom-color: #4a148c; }
+.era-novyj-chas .group-tabs a.active { color: #b71c1c; border-bottom-color: #b71c1c; }
+.era-moderna .group-tabs a.active { color: #1b5e20; border-bottom-color: #1b5e20; }
+.era-suchasnist .group-tabs a.active { color: #e65100; border-bottom-color: #e65100; }
+
+.era-starodavnij .group-info h2 { color: #1a237e; }
+.era-serednovichchya .group-info h2 { color: #4a148c; }
+.era-novyj-chas .group-info h2 { color: #b71c1c; }
+.era-moderna .group-info h2 { color: #1b5e20; }
+.era-suchasnist .group-info h2 { color: #e65100; }
+
+.era-starodavnij .group-cta a { background: #1a237e; }
+.era-starodavnij .group-cta a:hover { background: #0d47a1; }
+.era-serednovichchya .group-cta a { background: #4a148c; }
+.era-serednovichchya .group-cta a:hover { background: #6a1b9a; }
+.era-novyj-chas .group-cta a { background: #b71c1c; }
+.era-novyj-chas .group-cta a:hover { background: #c62828; }
+.era-moderna .group-cta a { background: #1b5e20; }
+.era-moderna .group-cta a:hover { background: #2e7d32; }
+.era-suchasnist .group-cta a { background: #e65100; }
+.era-suchasnist .group-cta a:hover { background: #ef6c00; }
+
 footer {
   text-align: center;
   padding: 1.5rem;

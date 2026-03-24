@@ -40,6 +40,14 @@ KAIROS.app = (function () {
 
       KAIROS.feed.init(allPosts, config);
 
+      // Load Cairo data
+      try {
+        var cairoData = await KAIROS.utils.loadJSON('data/cairo.json');
+        KAIROS.cairo.init(cairoData);
+      } catch (e) {
+        console.warn('Could not load cairo data', e);
+      }
+
       // Build shell
       renderHeader();
       renderSidebar();
@@ -63,6 +71,9 @@ KAIROS.app = (function () {
       });
       KAIROS.router.register('post', function (id, container) {
         KAIROS.feed.renderSingle(id, container);
+      });
+      KAIROS.router.register('cairo', function (param, container) {
+        KAIROS.cairo.render(param, container);
       });
 
       // Check if new user
@@ -153,7 +164,8 @@ KAIROS.app = (function () {
     var navItems = [
       { href: '#feed', text: '📰 Стрічка' },
       { href: '#my-profile', text: '👤 Мій профіль' },
-      { href: '#achievements', text: '🏆 Досягнення' }
+      { href: '#achievements', text: '🏆 Досягнення' },
+      { href: '#cairo', text: '🏛 Каїр' }
     ];
 
     navItems.forEach(function (item) {

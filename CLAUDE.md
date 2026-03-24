@@ -27,14 +27,15 @@ python -m http.server 8000
 
 Then open `http://localhost:8000`.
 
-## Two UI layers
+## Three UI layers
 
-The project has **two coexisting UI approaches**:
+The project has **three coexisting UI layers**:
 
-1. **Static HTML pages** (`index.html` + `pages/*.html`) — topic landing pages with nav bar, header, footer. Standalone HTML with `css/style.css`. No JS.
-2. **SPA shell** (`platform.html` + `css/kairos.css` + `js/*.js`) — a hash-router JS app. Routes: `#feed`, `#topic/<slug>`, `#profile/<id>`, `#my-profile`, `#achievements`, `#post/<id>`.
+1. **Login page** (`index.html` + `css/login.css`) — Facebook 2010-style login screen. Inline JS only. Select dropdown uses narrative email logins (e.g., `Pharaoh_Scribe@nile.delta`). Password: `L0v3 H1sT0r` (hidden in top-right corner, same color as background). Successful login redirects to topic page or SPA feed.
+2. **Group pages** (`pages/*.html` + `css/style.css`) — styled as Facebook group pages. Each page has a color-coded cover gradient via `body` class (`era-starodavnij`, `era-serednovichchya`, `era-novyj-chas`, `era-moderna`, `era-suchasnist`). Structure: header, nav (8 links), group-cover, group-info, group-tabs, group-body, group-cta ("До стрічки"). No JS.
+3. **SPA shell** (`platform.html` + `css/kairos.css` + `js/*.js`) — a hash-router JS app. Routes: `#feed`, `#topic/<slug>`, `#profile/<id>`, `#my-profile`, `#achievements`, `#post/<id>`.
 
-The two layers are connected: static pages link to the SPA via nav ("Платформа") and "Перейти до завдань" buttons; the SPA sidebar links back to `index.html`.
+Layers are connected: login → topic pages or SPA; topic pages link to SPA via nav ("Платформа", "Особиста інформація") and "До стрічки" button; SPA sidebar links back to `index.html`.
 
 ## Architecture (SPA)
 
@@ -63,8 +64,8 @@ Global namespace: `window.KAIROS`. Each module is an IIFE that attaches to `KAIR
 
 - **Transliteration**: file names use transliterated Ukrainian via hyphens (e.g., `novyj-chas`, `serednovichchya`)
 - **Topic slugs** used as identifiers everywhere: `starodavnij-svit`, `serednovichchya`, `novyj-chas`, `moderna`, `suchasnist`
-- **Nav duplication**: static pages duplicate the `<nav>` in every HTML file; active page gets class `active`. Adding a new static page requires updating nav in **all** HTML files (index.html + 5 pages).
-- **Images**: `img/avatars/` for profile avatars, `img/badges/` for achievement badges. Default avatar: `img/avatars/default.svg`.
+- **Nav duplication**: group pages duplicate the `<nav>` in every HTML file (8 links); active page gets class `active`. Adding a new page requires updating nav in **all 5** `pages/*.html` files. `index.html` has no nav (login-only).
+- **Images**: `img/avatars/` for profile avatars, `img/badges/` for achievement badges. Default avatar: `img/avatars/default.svg`. `img/favicon-16.png` / `img/favicon-32.png` — favicons. `img/logo.svg` — vector logo (displayed with "digital ruin" glitch effect on login page).
 - **No build step**: edit files directly, refresh browser
 
 ## Adding content

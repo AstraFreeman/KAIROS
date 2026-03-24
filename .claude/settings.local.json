@@ -12,7 +12,10 @@
       "Bash(curl:*)",
       "Bash(mv icon_s.png favicon-16.png)",
       "Bash(mv icon_m.png favicon-32.png)",
-      "Bash(mv Icon_old.svg logo.svg)"
+      "Bash(mv Icon_old.svg logo.svg)",
+      "Bash(for page:*)",
+      "Bash(do echo:*)",
+      "Bash(done)"
     ]
   }
 }

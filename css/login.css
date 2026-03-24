@@ -10,6 +10,17 @@ body {
   min-height: 100vh;
 }
 
+.pwd-hint {
+  position: fixed;
+  top: 8px;
+  right: 12px;
+  color: #e9eaed;
+  font-size: 11px;
+  font-family: monospace;
+  user-select: all;
+  z-index: 10;
+}
+
 .login-page {
   min-height: 100vh;
   display: flex;
