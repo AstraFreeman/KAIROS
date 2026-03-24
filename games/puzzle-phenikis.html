@@ -4,114 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Історичний пазл: видатні гетьмани</title>
-    <link rel="stylesheet" href="../../shared/css/reset.css">
-    <link rel="stylesheet" href="../../shared/css/theme.css">
-    <link rel="stylesheet" href="../../shared/css/animations.css">
     <style>
+        /* ── Reset & Base ── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
         :root {
-            --cell-size: calc(400px / 3);
+            --bg: #0f0f1a;
+            --color-text-primary: #e8e4dc;
+            --color-text-secondary: #a09b8f;
+            --color-text-muted: #6b6760;
             --accent: #e8c97a;
-            --surface: #16161a;
-            --border: #2a2a32;
+            --border: rgba(255,255,255,0.08);
+            --glass-bg: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.06);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 999px;
+            --z-modal: 1000;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-3xl: 1.875rem;
+            --text-4xl: 2.25rem;
+            --transition-fast: 0.15s ease;
+
+            /* Board adapts to container */
+            --board-size: min(50vw, 50vh, 280px);
+            --cell-size: calc(var(--board-size) / 3);
         }
 
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--color-text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            --game-accent: #e8c97a;
         }
 
-        /* ── Game container ── */
-        #gameContainer {
-            position: relative;
-            width: 94vw;
-            max-width: 900px;
-            min-height: 94vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* ── Background glow ── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 60% 40% at 20% 20%, rgba(232,201,122,0.06) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 60% at 80% 80%, rgba(100,80,200,0.05) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
+        .hidden { display: none !important; }
 
         /* ── HUD ── */
         #hud {
-            width: 100%;
-            max-width: 700px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
-            margin-bottom: 20px;
-            z-index: 10;
-        }
-
-        #hud span {
-            color: var(--color-text-primary);
+            padding: 8px 16px;
+            background: rgba(15,15,26,0.9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
             font-size: var(--text-sm);
-            font-weight: 600;
+            color: var(--color-text-secondary);
         }
 
-        #hudTitle {
-            color: var(--accent) !important;
-        }
+        #hudTitle { color: var(--accent); font-weight: 600; }
 
         /* ── Clue banner ── */
         #clueBanner {
-            width: 100%;
-            max-width: 700px;
+            margin: 48px auto 8px;
+            max-width: 600px;
             text-align: center;
-            padding: 14px 20px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
-            margin-bottom: 24px;
-            z-index: 10;
+            padding: 8px 16px;
         }
 
-        #clueBanner .clue-question {
-            color: var(--accent);
-            font-size: var(--text-lg);
-            font-weight: 700;
-            margin-bottom: 6px;
+        .clue-question {
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--color-text-muted);
+            margin-bottom: 4px;
         }
 
-        #clueBanner .clue-hint {
-            color: var(--color-text-secondary);
+        .clue-hint {
             font-size: var(--text-sm);
-            line-height: 1.5;
+            color: var(--accent);
+            font-style: italic;
         }
 
-        /* ── Game area: board + tray ── */
+        /* ── Game Container ── */
+        #gameContainer {
+            width: 96%;
+            max-width: 600px;
+            margin: 4px auto;
+            padding: 0 8px 16px;
+        }
+
+        /* ── Game Area: vertical stack — tray-top, board, tray-bottom ── */
         .game-area {
-            display: flex;
-            align-items: flex-start;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-            z-index: 5;
-        }
-
-        /* ── PUZZLE BOARD ── */
-        .board-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -120,147 +109,118 @@
 
         .board-label {
             font-size: var(--text-xs);
-            letter-spacing: 0.3em;
             text-transform: uppercase;
-            opacity: 0.35;
-            color: var(--color-text-secondary);
+            letter-spacing: 0.25em;
+            color: var(--color-text-muted);
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        /* ── Board ── */
+        .board-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         #board {
-            width: 400px;
-            height: 400px;
+            width: var(--board-size);
+            height: var(--board-size);
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
             border: 1px solid var(--border);
-            position: relative;
-            background: var(--surface);
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 20px 60px rgba(0,0,0,0.6);
-            overflow: visible;
             border-radius: var(--radius-sm);
-            margin: 0 auto;
+            background: var(--glass-bg);
+            position: relative;
         }
 
+        /* ── Cells ── */
         .cell {
-            width: var(--cell-size);
-            height: var(--cell-size);
-            border: 1px solid var(--border);
             position: relative;
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed rgba(255,255,255,0.06);
+            border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s, border-color 0.2s;
-            overflow: visible;
-        }
-
-        .cell[data-index="1"] { z-index: 1; }
-        .cell[data-index="2"] { z-index: 2; }
-        .cell[data-index="3"] { z-index: 3; }
-        .cell[data-index="4"] { z-index: 4; }
-        .cell[data-index="5"] { z-index: 5; }
-        .cell[data-index="6"] { z-index: 6; }
-        .cell[data-index="7"] { z-index: 7; }
-        .cell[data-index="8"] { z-index: 8; }
-        .cell[data-index="9"] { z-index: 9; }
-
-        .cell.drag-over {
-            background: rgba(232,201,122,0.08);
-            border-color: rgba(232,201,122,0.4);
+            overflow: hidden;
         }
 
         .cell-num {
-            font-size: var(--text-xs);
-            opacity: 0.15;
+            font-size: calc(var(--cell-size) * 0.22);
+            color: rgba(255,255,255,0.06);
+            font-weight: 700;
             pointer-events: none;
-            user-select: none;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            color: var(--color-text-muted);
+            position: absolute;
         }
 
-        /* ── PIECE TRAY ── */
+        .cell.drag-over {
+            background: rgba(232,201,122,0.08);
+            border-color: rgba(232,201,122,0.3);
+        }
+
+        /* ── Trays (pieces above & below board) ── */
         .tray-wrapper {
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
         }
 
-        #tray {
-            width: 240px;
-            min-height: 600px;
-            background: var(--surface);
+        .tray-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px;
+            min-height: 60px;
+            background: var(--glass-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 10px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            width: 100%;
         }
 
-        /* ── PIECES ── */
-        #tray .piece {
-            width: calc(var(--cell-size) * 1.4);
-            height: calc(var(--cell-size) * 1.4);
+        /* ── Pieces ── */
+        .piece {
+            width: calc(var(--cell-size) * 0.9);
+            height: calc(var(--cell-size) * 0.9);
             cursor: grab;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
             position: relative;
             flex-shrink: 0;
-            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: visible;
         }
 
-        #tray .piece img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
+        .piece img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             display: block;
             pointer-events: none;
-            user-select: none;
-            -webkit-user-drag: none;
         }
 
+        /* Pieces inside cells: fill the cell */
         .cell .piece {
+            width: 100%;
+            height: 100%;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            cursor: grab;
-            pointer-events: none;
-            overflow: visible;
-            z-index: inherit;
+            top: 0;
+            left: 0;
+            border-radius: 0;
         }
 
         .cell .piece img {
-            width: auto;
-            height: auto;
-            display: block;
-            pointer-events: auto;
-            user-select: none;
-            -webkit-user-drag: none;
-            position: absolute;
-            transform: translate(-50%, -50%);
-            top: 0;
-            left: 0;
-            max-width: calc(var(--cell-size) * 1.7);
-            max-height: calc(var(--cell-size) * 1.7);
+            width: 100%;
+            height: 100%;
         }
 
-        .cell .piece:hover,
-        #tray .piece:hover {
-            z-index: 20 !important;
-        }
-
-        #tray .piece:hover {
+        .piece:hover {
+            z-index: 20;
             transform: scale(1.04);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(232,201,122,0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
         }
 
         .piece.dragging {
@@ -268,16 +228,23 @@
             cursor: grabbing;
         }
 
-        /* ── Reset button ── */
+        /* ── Controls row ── */
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 4px;
+        }
+
         #resetBtn {
-            margin-top: 10px;
             background: none;
             border: 1px solid var(--border);
             color: var(--color-text-secondary);
             font-size: var(--text-xs);
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            padding: 8px 20px;
+            padding: 6px 16px;
             cursor: pointer;
             border-radius: var(--radius-sm);
             transition: border-color 0.2s, color 0.2s;
@@ -288,13 +255,11 @@
             color: var(--accent);
         }
 
-        /* ── Progress counter ── */
         #progress {
             font-size: var(--text-xs);
             letter-spacing: 0.25em;
             opacity: 0.4;
             font-weight: 300;
-            margin-top: 8px;
             color: var(--color-text-secondary);
         }
 
@@ -319,9 +284,7 @@
             transition: opacity 0.4s ease;
         }
 
-        .overlay-panel.hidden {
-            display: none !important;
-        }
+        .overlay-panel.hidden { display: none !important; }
 
         .overlay-panel h2 {
             color: var(--accent);
@@ -355,9 +318,7 @@
             box-shadow: 0 6px 28px rgba(232,201,122,0.5);
         }
 
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
+        .btn-primary:active { transform: scale(0.97); }
 
         /* ── Intro panel ── */
         .instructions-list {
@@ -390,13 +351,8 @@
             overflow: hidden;
         }
 
-        #board.solved #successOverlay {
-            display: flex;
-        }
-
-        #board.solved .cell {
-            border-color: transparent;
-        }
+        #board.solved #successOverlay { display: flex; }
+        #board.solved .cell { border-color: transparent; }
 
         #successImg {
             width: 100%;
@@ -410,14 +366,12 @@
             to   { opacity: 1; transform: scale(1); }
         }
 
-        /* ── Completion panel (between puzzles) ── */
-        #completionPanel {
-            background: rgba(15, 15, 26, 0.96);
-        }
+        /* ── Completion panel ── */
+        #completionPanel { background: rgba(15, 15, 26, 0.96); }
 
         #completionPanel .portrait-frame {
-            width: 220px;
-            height: 220px;
+            width: 180px;
+            height: 180px;
             border-radius: var(--radius-lg);
             overflow: hidden;
             border: 2px solid var(--accent);
@@ -457,9 +411,7 @@
         }
 
         /* ── Victory panel ── */
-        #victoryPanel h2 {
-            font-size: var(--text-4xl);
-        }
+        #victoryPanel h2 { font-size: var(--text-4xl); }
 
         .summary-list {
             padding: 0;
@@ -486,43 +438,35 @@
             font-size: var(--text-xs);
         }
 
-        /* ── Responsive ── */
-        @media (max-width: 700px) {
+        /* ── Responsive: small screens ── */
+        @media (max-width: 500px) {
             :root {
-                --cell-size: calc(min(85vw, 360px) / 3);
+                --board-size: min(80vw, 260px);
             }
-
-            #board {
-                width: min(85vw, 360px);
-                height: min(85vw, 360px);
+            .tray-section { gap: 4px; padding: 4px; }
+            .piece {
+                width: calc(var(--cell-size) * 0.85);
+                height: calc(var(--cell-size) * 0.85);
             }
+        }
 
-            .game-area {
-                flex-direction: column-reverse;
-                gap: 20px;
+        /* ── Iframe mode: tighter layout ── */
+        @media (max-height: 700px) {
+            :root {
+                --board-size: min(45vw, 45vh, 240px);
             }
-
-            #tray {
-                width: min(90vw, 400px);
-                min-height: auto;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                padding: 8px;
-            }
-
-            #tray .piece {
-                width: calc(var(--cell-size) * 1.1);
-                height: calc(var(--cell-size) * 1.1);
-            }
-
-            .tray-wrapper {
-                order: -1;
+            #clueBanner { margin-top: 40px; margin-bottom: 4px; padding: 4px 12px; }
+            #gameContainer { padding-bottom: 8px; }
+            .game-area { gap: 8px; }
+            .tray-section { gap: 4px; padding: 4px; }
+            .piece {
+                width: calc(var(--cell-size) * 0.8);
+                height: calc(var(--cell-size) * 0.8);
             }
         }
     </style>
 </head>
-<body data-nav="overlay" data-home-url="../../index.html" data-section="Ігри" data-game-title="Історичний пазл">
+<body>
 
     <!-- HUD -->
     <div id="hud" class="hidden">
@@ -538,14 +482,13 @@
 
     <div id="gameContainer" class="hidden">
         <div class="game-area">
-            <!-- PIECE TRAY -->
+            <!-- TOP TRAY -->
             <div class="tray-wrapper">
                 <div class="board-label">Деталі</div>
-                <div id="tray"></div>
-                <button id="resetBtn">&#8634; Скинути</button>
+                <div id="tray-top" class="tray-section"></div>
             </div>
 
-            <!-- BOARD -->
+            <!-- BOARD (center) -->
             <div class="board-wrapper">
                 <div class="board-label">Поле</div>
                 <div id="board">
@@ -553,7 +496,15 @@
                         <img id="successImg" src="" alt="Портрет">
                     </div>
                 </div>
-                <div id="progress">Розміщено: <span id="placedCount">0</span> / 9</div>
+            </div>
+
+            <!-- BOTTOM TRAY -->
+            <div class="tray-wrapper">
+                <div id="tray-bottom" class="tray-section"></div>
+                <div class="controls-row">
+                    <button id="resetBtn">&#8634; Скинути</button>
+                    <div id="progress">Розміщено: <span id="placedCount">0</span> / 9</div>
+                </div>
             </div>
         </div>
     </div>
@@ -571,7 +522,7 @@
         <button class="btn-primary" id="btnStart">Почати гру</button>
     </div>
 
-    <!-- ── COMPLETION PANEL (between puzzles) ── -->
+    <!-- ── COMPLETION PANEL ── -->
     <div class="overlay-panel hidden" id="completionPanel">
         <div class="portrait-frame">
             <img id="completionPortrait" src="" alt="Портрет">
@@ -636,7 +587,8 @@
          *  DOM REFERENCES
          * ============================ */
         var board = document.getElementById('board');
-        var tray = document.getElementById('tray');
+        var trayTop = document.getElementById('tray-top');
+        var trayBottom = document.getElementById('tray-bottom');
         var hud = document.getElementById('hud');
         var hudTitle = document.getElementById('hudTitle');
         var hudCounter = document.getElementById('hudCounter');
@@ -667,7 +619,6 @@
          *  BUILD BOARD CELLS
          * ============================ */
         function buildCells() {
-            // Remove old cells (keep successOverlay)
             var oldCells = board.querySelectorAll('.cell');
             for (var i = 0; i < oldCells.length; i++) {
                 board.removeChild(oldCells[i]);
@@ -688,15 +639,12 @@
         }
 
         /* ============================
-         *  BUILD PIECES INTO TRAY
+         *  BUILD PIECES — split between top & bottom trays
          * ============================ */
         function buildPieces(puzzle) {
-            // Clear tray
-            while (tray.firstChild) {
-                tray.removeChild(tray.firstChild);
-            }
+            while (trayTop.firstChild) trayTop.removeChild(trayTop.firstChild);
+            while (trayBottom.firstChild) trayBottom.removeChild(trayBottom.firstChild);
 
-            // Build ALL 27 pieces from all 3 sets
             var allPieceData = [];
             PUZZLES.forEach(function(p) {
                 for (var i = 1; i <= 9; i++) {
@@ -710,8 +658,9 @@
             });
 
             var order = shuffle(allPieceData);
+            var half = Math.ceil(order.length / 2);
 
-            order.forEach(function (pd) {
+            order.forEach(function (pd, idx) {
                 var div = document.createElement('div');
                 div.className = 'piece';
                 div.dataset.piece = String(pd.piece);
@@ -722,7 +671,12 @@
                 img.alt = pd.name + ' — фрагмент ' + pd.piece;
                 img.draggable = false;
                 div.appendChild(img);
-                tray.appendChild(div);
+
+                if (idx < half) {
+                    trayTop.appendChild(div);
+                } else {
+                    trayBottom.appendChild(div);
+                }
             });
         }
 
@@ -730,31 +684,19 @@
          *  START A PUZZLE
          * ============================ */
         function startPuzzle(index) {
-            if (index === 0) {
-                if (window.HLGAnalytics) HLGAnalytics.startSession('puzzle-phenikis');
-            }
             currentPuzzleIndex = index;
             var puzzle = PUZZLES[index];
 
-            // Reset board state
             board.classList.remove('solved');
-
-            // Build DOM
             buildCells();
             buildPieces(puzzle);
 
-            // Set success image
             successImg.src = puzzle.portrait;
-
-            // Update HUD
             hudTitle.textContent = 'Пазл ' + (index + 1) + '/3: ' + puzzle.name;
             placedCountEl.textContent = '0';
             hudCounter.textContent = 'Розміщено: 0 / 9';
-
-            // Update clue
             clueHint.textContent = puzzle.clue;
 
-            // Show game UI
             hud.classList.remove('hidden');
             clueBanner.classList.remove('hidden');
             gameContainer.classList.remove('hidden');
@@ -773,13 +715,11 @@
             dragged = piece;
             dragOrigin = piece.parentElement;
 
-            // Measure the rendered image for ghost sizing
             var img = piece.querySelector('img');
             var imgRect = img ? img.getBoundingClientRect() : piece.getBoundingClientRect();
             var gw = imgRect.width;
             var gh = imgRect.height;
 
-            // Create ghost
             var ghost = document.createElement('div');
             ghost.id = 'drag-ghost';
             ghost.style.cssText =
@@ -905,14 +845,12 @@
             var target = cellFromPoint(x, y);
 
             if (target) {
-                // If target cell already has a piece, swap back
                 var existing = target.querySelector('.piece');
                 if (existing) {
                     dragOrigin.appendChild(existing);
                 }
                 target.appendChild(piece);
             } else {
-                // Return to origin
                 dragOrigin.appendChild(piece);
             }
 
@@ -947,19 +885,13 @@
             hudCounter.textContent = 'Розміщено: ' + placed + ' / 9';
 
             if (placed === TOTAL_PIECES && solved) {
-                setTimeout(function () {
-                    onPuzzleSolved();
-                }, 400);
+                setTimeout(function () { onPuzzleSolved(); }, 400);
             }
         }
 
         function onPuzzleSolved() {
             board.classList.add('solved');
-
-            // After a brief moment showing the portrait on the board, show completion panel
-            setTimeout(function () {
-                showCompletion();
-            }, 1200);
+            setTimeout(function () { showCompletion(); }, 1200);
         }
 
         /* ============================
@@ -976,17 +908,13 @@
             var isLast = currentPuzzleIndex >= PUZZLES.length - 1;
             btnNext.textContent = isLast ? 'Результати' : 'Наступний пазл';
 
-            // Hide game UI
             hud.classList.add('hidden');
             clueBanner.classList.add('hidden');
             gameContainer.classList.add('hidden');
-
             completionPanel.classList.remove('hidden');
         }
 
         function showVictory() {
-            if (window.HLGAnalytics) HLGAnalytics.endSession({score: PUZZLES.length, won: true});
-            // Clear and rebuild summary list
             while (summaryList.firstChild) {
                 summaryList.removeChild(summaryList.firstChild);
             }
@@ -1012,15 +940,24 @@
         resetBtn.addEventListener('click', function () {
             board.classList.remove('solved');
 
-            // Move all pieces from cells back to tray
             cells.forEach(function (cell) {
                 var p = cell.querySelector('.piece');
-                if (p) tray.appendChild(p);
+                if (p) trayBottom.appendChild(p);
             });
 
-            // Re-shuffle tray children
-            var pieces = Array.prototype.slice.call(tray.querySelectorAll('.piece'));
-            shuffle(pieces).forEach(function (p) { tray.appendChild(p); });
+            // Re-shuffle and split between trays
+            var pieces = Array.prototype.slice.call(
+                document.querySelectorAll('#tray-top .piece, #tray-bottom .piece')
+            );
+            var shuffled = shuffle(pieces);
+            var half = Math.ceil(shuffled.length / 2);
+            shuffled.forEach(function (p, idx) {
+                if (idx < half) {
+                    trayTop.appendChild(p);
+                } else {
+                    trayBottom.appendChild(p);
+                }
+            });
 
             placedCountEl.textContent = '0';
             hudCounter.textContent = 'Розміщено: 0 / 9';
@@ -1036,7 +973,6 @@
 
         btnNext.addEventListener('click', function () {
             completionPanel.classList.add('hidden');
-
             if (currentPuzzleIndex >= PUZZLES.length - 1) {
                 showVictory();
             } else {
@@ -1068,11 +1004,8 @@
          * ============================ */
         (function preload() {
             PUZZLES.forEach(function (p) {
-                // Preload portrait
                 var img0 = new Image();
                 img0.src = p.portrait;
-
-                // Preload pieces
                 for (var i = 1; i <= 9; i++) {
                     var imgN = new Image();
                     imgN.src = '../data/games/pheniks_2/' + p.prefix + '_' + i + '.png';

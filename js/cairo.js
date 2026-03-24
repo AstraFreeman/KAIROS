@@ -77,21 +77,46 @@ KAIROS.cairo = (function () {
     // Music controls
     var musicCtrl = document.createElement('div');
     musicCtrl.className = 'cairo-music-ctrl';
-    var muteBtn = document.createElement('button');
-    muteBtn.className = 'cairo-mute-btn';
-    muteBtn.textContent = '\u266B Вимкнути музику';
-    var muted = false;
-    muteBtn.addEventListener('click', function () {
-      muted = !muted;
-      if (muted) {
-        stopMusic();
-        muteBtn.textContent = '\u266B Увімкнути музику';
+
+    var playBtn = document.createElement('button');
+    playBtn.className = 'cairo-music-btn';
+    playBtn.textContent = '\u23F8 Пауза';
+    var playing = true;
+
+    playBtn.addEventListener('click', function () {
+      if (playing) {
+        if (audioEl) audioEl.pause();
+        playBtn.textContent = '\u25B6 Грати';
+        playing = false;
       } else {
-        startMusic();
-        muteBtn.textContent = '\u266B Вимкнути музику';
+        if (audioEl) {
+          audioEl.play().catch(function () {});
+        } else {
+          startMusic();
+        }
+        playBtn.textContent = '\u23F8 Пауза';
+        playing = true;
       }
     });
-    musicCtrl.appendChild(muteBtn);
+    musicCtrl.appendChild(playBtn);
+
+    var volLabel = document.createElement('span');
+    volLabel.className = 'cairo-vol-label';
+    volLabel.textContent = '\u266B';
+    musicCtrl.appendChild(volLabel);
+
+    var volSlider = document.createElement('input');
+    volSlider.type = 'range';
+    volSlider.className = 'cairo-vol-slider';
+    volSlider.min = '0';
+    volSlider.max = '100';
+    volSlider.value = '30';
+    volSlider.addEventListener('input', function () {
+      var v = parseInt(volSlider.value, 10) / 100;
+      if (audioEl) audioEl.volume = v;
+    });
+    musicCtrl.appendChild(volSlider);
+
     container.appendChild(musicCtrl);
 
     // Card area

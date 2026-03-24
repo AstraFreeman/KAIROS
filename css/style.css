@@ -107,6 +107,33 @@ main {
   margin-bottom: 1rem;
 }
 
+.group-top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.group-top-nav .back-link {
+  margin-bottom: 0;
+}
+
+.group-cta-link {
+  display: inline-block;
+  background: #4267b2;
+  color: #fff;
+  padding: 0.5rem 1.4rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.group-cta-link:hover {
+  background: #365899;
+}
+
 .back-link {
   display: inline-block;
   margin-bottom: 1.5rem;
@@ -252,16 +279,26 @@ main {
 .era-moderna .group-info h2 { color: #1b5e20; }
 .era-suchasnist .group-info h2 { color: #e65100; }
 
-.era-starodavnij .group-cta a { background: #1a237e; }
-.era-starodavnij .group-cta a:hover { background: #0d47a1; }
-.era-serednovichchya .group-cta a { background: #4a148c; }
-.era-serednovichchya .group-cta a:hover { background: #6a1b9a; }
-.era-novyj-chas .group-cta a { background: #b71c1c; }
-.era-novyj-chas .group-cta a:hover { background: #c62828; }
-.era-moderna .group-cta a { background: #1b5e20; }
-.era-moderna .group-cta a:hover { background: #2e7d32; }
-.era-suchasnist .group-cta a { background: #e65100; }
-.era-suchasnist .group-cta a:hover { background: #ef6c00; }
+.era-starodavnij .group-cta a,
+.era-starodavnij .group-cta-link { background: #1a237e; }
+.era-starodavnij .group-cta a:hover,
+.era-starodavnij .group-cta-link:hover { background: #0d47a1; }
+.era-serednovichchya .group-cta a,
+.era-serednovichchya .group-cta-link { background: #4a148c; }
+.era-serednovichchya .group-cta a:hover,
+.era-serednovichchya .group-cta-link:hover { background: #6a1b9a; }
+.era-novyj-chas .group-cta a,
+.era-novyj-chas .group-cta-link { background: #b71c1c; }
+.era-novyj-chas .group-cta a:hover,
+.era-novyj-chas .group-cta-link:hover { background: #c62828; }
+.era-moderna .group-cta a,
+.era-moderna .group-cta-link { background: #1b5e20; }
+.era-moderna .group-cta a:hover,
+.era-moderna .group-cta-link:hover { background: #2e7d32; }
+.era-suchasnist .group-cta a,
+.era-suchasnist .group-cta-link { background: #e65100; }
+.era-suchasnist .group-cta a:hover,
+.era-suchasnist .group-cta-link:hover { background: #ef6c00; }
 
 /* === Group Posts (community wall) === */
 

@@ -733,22 +733,62 @@ a:hover {
 }
 
 .cairo-music-ctrl {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
-.cairo-mute-btn {
+.cairo-music-btn {
   background: transparent;
-  border: none;
+  border: 1px solid #d6cfc3;
   color: #8a7d6b;
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
   font-family: inherit;
-  padding: 4px 12px;
+  padding: 5px 14px;
+  border-radius: 3px;
+  transition: border-color 0.2s, color 0.2s;
 }
 
-.cairo-mute-btn:hover {
-  color: #5c4a2a;
+.cairo-music-btn:hover {
+  border-color: #b8963a;
+  color: #b8963a;
+}
+
+.cairo-vol-label {
+  color: #8a7d6b;
+  font-size: 14px;
+}
+
+.cairo-vol-slider {
+  width: 100px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #d6cfc3;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.cairo-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #b8963a;
+  cursor: pointer;
+}
+
+.cairo-vol-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #b8963a;
+  border: none;
+  cursor: pointer;
 }
 
 .cairo-card {
@@ -832,7 +872,7 @@ a:hover {
 
 .cairo-game-iframe {
   width: 100%;
-  height: 600px;
+  height: 680px;
   border: none;
   border-radius: 4px;
 }
