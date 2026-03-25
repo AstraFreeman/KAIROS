@@ -101,26 +101,58 @@ KAIROS.ui = (function () {
     };
     actionsBar.appendChild(commentBtn);
 
-    // Complete task button
+    // Complete task button or response form
     if (post.taskType && !tracker.hasCompleted(post.id)) {
-      var completeBtn = document.createElement('button');
-      completeBtn.className = 'post-action-btn';
-      completeBtn.innerHTML = '<span class="icon">✅</span>Виконано';
-      completeBtn.onclick = function () {
-        tracker.record({
-          type: 'complete',
-          postId: post.id,
-          topic: post.topic,
-          points: post.points || 10
-        });
-        completeBtn.style.display = 'none';
-        toast('Завдання виконано! +' + (post.points || 10) + ' балів');
-        KAIROS.app.updateRightbar();
-      };
-      actionsBar.appendChild(completeBtn);
+      if (post.responseType) {
+        // пост має систему відповідей — кнопка відкриває форму
+        var respondBtn = document.createElement('button');
+        respondBtn.className = 'post-action-btn';
+        respondBtn.innerHTML = '<span class="icon">📝</span>Відповісти';
+        respondBtn.onclick = function () {
+          var responseSection = card.querySelector('.task-response-section');
+          if (responseSection) {
+            responseSection.style.display = responseSection.style.display === 'none' ? 'block' : 'none';
+          }
+        };
+        actionsBar.appendChild(respondBtn);
+      } else {
+        // стара поведінка — просте зарахування
+        var completeBtn = document.createElement('button');
+        completeBtn.className = 'post-action-btn';
+        completeBtn.innerHTML = '<span class="icon">✅</span>Виконано';
+        completeBtn.onclick = function () {
+          tracker.record({
+            type: 'complete',
+            postId: post.id,
+            topic: post.topic,
+            difficulty: post.difficulty,
+            points: post.points || 10
+          });
+          completeBtn.style.display = 'none';
+          toast('Завдання виконано! +' + (post.points || 10) + ' балів');
+          KAIROS.app.updateRightbar();
+        };
+        actionsBar.appendChild(completeBtn);
+      }
     }
 
     card.appendChild(actionsBar);
+
+    // Task response section (якщо пост має responseType)
+    if (post.responseType && !tracker.hasCompleted(post.id)) {
+      var responseSection = taskResponseBox(post, profile);
+      card.appendChild(responseSection);
+    } else if (post.responseType && tracker.hasCompleted(post.id)) {
+      // показати збережену відповідь
+      var savedResponse = tracker.getTaskResponse(post.id);
+      if (savedResponse) {
+        var doneSection = document.createElement('div');
+        doneSection.className = 'task-response-section task-response-done';
+        doneSection.innerHTML = '<div class="task-response-result success">' +
+          '<span class="icon">✅</span> Завдання виконано</div>';
+        card.appendChild(doneSection);
+      }
+    }
 
     // Comments section
     var commentsSection = commentBox(post.id);
@@ -230,6 +262,96 @@ KAIROS.ui = (function () {
     return section;
   }
 
+  function taskResponseBox(post, profile) {
+    var section = document.createElement('div');
+    section.className = 'task-response-section';
+    section.style.display = 'none';
+
+    var title = document.createElement('div');
+    title.className = 'task-response-title';
+    title.textContent = 'Ваша відповідь:';
+    section.appendChild(title);
+
+    var textarea = document.createElement('textarea');
+    textarea.className = 'task-response-input';
+    textarea.placeholder = 'Напишіть вашу відповідь тут...';
+    textarea.rows = 4;
+    section.appendChild(textarea);
+
+    var btnWrap = document.createElement('div');
+    btnWrap.className = 'task-response-actions';
+
+    var submitBtn = document.createElement('button');
+    submitBtn.className = 'btn-primary';
+    submitBtn.textContent = 'Надіслати відповідь';
+
+    var feedbackEl = document.createElement('div');
+    feedbackEl.className = 'task-response-feedback';
+    feedbackEl.style.display = 'none';
+
+    var charReplyEl = document.createElement('div');
+    charReplyEl.className = 'task-response-character-reply';
+    charReplyEl.style.display = 'none';
+
+    submitBtn.onclick = function () {
+      var answer = textarea.value.trim();
+      if (!answer) return;
+
+      var validation = KAIROS.validation;
+      var result = validation.evaluate(answer, post);
+
+      // Показати фідбек
+      feedbackEl.style.display = 'block';
+      feedbackEl.className = 'task-response-feedback ' + (result.passed ? 'success' : 'warning');
+      feedbackEl.textContent = result.feedback;
+
+      // Показати відповідь персонажа
+      if (result.characterReply) {
+        charReplyEl.style.display = 'block';
+        charReplyEl.innerHTML = '<strong>' + utils.escapeHtml(profile.name) + ':</strong> ' +
+          utils.escapeHtml(result.characterReply);
+      }
+
+      if (result.passed) {
+        // Зарахувати завдання
+        var totalPoints = (post.points || 10) + result.bonusPoints;
+        tracker.record({
+          type: 'task-response',
+          postId: post.id,
+          text: answer,
+          result: result
+        });
+        tracker.record({
+          type: 'complete',
+          postId: post.id,
+          topic: post.topic,
+          difficulty: post.difficulty,
+          points: totalPoints
+        });
+
+        var msg = 'Завдання виконано! +' + totalPoints + ' балів';
+        if (result.bonusPoints > 0) {
+          msg += ' (бонус +' + result.bonusPoints + ')';
+        }
+        var tokenMsg = (post.difficulty >= 3 ? 2 : 1);
+        msg += ' | +' + tokenMsg + ' 🎴';
+        toast(msg);
+
+        // Заблокувати поле
+        textarea.disabled = true;
+        submitBtn.style.display = 'none';
+        KAIROS.app.updateRightbar();
+      }
+    };
+
+    btnWrap.appendChild(submitBtn);
+    section.appendChild(btnWrap);
+    section.appendChild(feedbackEl);
+    section.appendChild(charReplyEl);
+
+    return section;
+  }
+
   function profileMini(profile) {
     var wrap = document.createElement('div');
     wrap.className = 'profile-friend-mini';
@@ -326,6 +448,7 @@ KAIROS.ui = (function () {
     postCard: postCard,
     likeButton: likeButton,
     commentBox: commentBox,
+    taskResponseBox: taskResponseBox,
     profileMini: profileMini,
     achievementCard: achievementCard,
     toast: toast,

@@ -64,6 +64,30 @@ KAIROS.achievements = (function () {
       case 'posts-completed':
         return state.completedPostIds.length >= cond.count;
 
+      case 'cards-collected':
+        var inv = state.inventory || [];
+        var uniqueCards = [];
+        inv.forEach(function (item) {
+          if (uniqueCards.indexOf(item.cardId) === -1) uniqueCards.push(item.cardId);
+        });
+        return uniqueCards.length >= cond.count;
+
+      case 'rare-card-pulled':
+        var history = state.pullHistory || [];
+        return history.some(function (p) {
+          return p.rarity === 'epic' || p.rarity === 'legendary';
+        });
+
+      case 'era-cards-complete':
+        if (!KAIROS.cards || !KAIROS.cards.getCollectionStats) return false;
+        var stats = KAIROS.cards.getCollectionStats();
+        for (var era in stats.byEra) {
+          if (stats.byEra[era].owned === stats.byEra[era].total && stats.byEra[era].total > 0) {
+            return true;
+          }
+        }
+        return false;
+
       default:
         return false;
     }

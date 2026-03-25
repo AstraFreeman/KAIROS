@@ -682,6 +682,346 @@ a:hover {
   margin-top: 2px;
 }
 
+/* --- Task Response --- */
+.task-response-section {
+  border-top: 1px solid #e9ebee;
+  padding: 12px 16px;
+  background: #f8f9fa;
+}
+
+.task-response-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.task-response-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.task-response-input:focus {
+  border-color: #4267b2;
+  outline: none;
+}
+
+.task-response-actions {
+  margin-bottom: 8px;
+}
+
+.task-response-actions .btn-primary {
+  background: #4267b2;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.task-response-actions .btn-primary:hover {
+  background: #365899;
+}
+
+.task-response-feedback {
+  padding: 8px 12px;
+  border-radius: 3px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.task-response-feedback.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.task-response-feedback.warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.task-response-character-reply {
+  background: #e8f0fe;
+  border-left: 3px solid #4267b2;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #333;
+  border-radius: 0 3px 3px 0;
+  font-style: italic;
+}
+
+.task-response-done {
+  padding: 8px 16px;
+}
+
+.task-response-result.success {
+  color: #155724;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* --- Card Collection --- */
+.collection-header {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.collection-header h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+  color: #333;
+}
+
+.collection-stats {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.collection-filter-bar {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 8px;
+}
+
+.collection-filter-btn {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.collection-filter-btn.active {
+  background: #4267b2;
+  color: #fff;
+  border-color: #4267b2;
+}
+
+.collection-progress {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.progress-label {
+  width: 120px;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4267b2;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.progress-text {
+  width: 30px;
+  text-align: right;
+  color: #999;
+  font-size: 11px;
+}
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.collection-card {
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  padding: 14px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.collection-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.collection-card.card-locked {
+  opacity: 0.5;
+  filter: grayscale(0.8);
+}
+
+.card-rarity-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.card-type-icon {
+  font-size: 36px;
+  margin: 8px 0;
+}
+
+.card-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.card-era {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.card-description {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.card-fact {
+  font-size: 11px;
+  color: #666;
+  background: #f8f9fa;
+  padding: 6px 8px;
+  border-radius: 3px;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.card-locked-text {
+  font-size: 13px;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* --- Roulette Modal --- */
+.roulette-box {
+  max-width: 480px !important;
+  text-align: center;
+}
+
+.roulette-info {
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.roulette-card-area {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.roulette-placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+.roulette-reveal {
+  animation: rouletteFlash 1.2s ease-in-out;
+}
+
+.roulette-revealed {
+  animation: rouletteReveal 0.5s ease-out;
+}
+
+@keyframes rouletteFlash {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes rouletteReveal {
+  0% { opacity: 0; transform: scale(0.8) rotateY(90deg); }
+  100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+
+.roulette-rarity-flash {
+  font-size: 28px;
+  font-weight: bold;
+  animation: rarityPulse 1.2s ease-in-out;
+}
+
+@keyframes rarityPulse {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  30%, 70% { opacity: 1; transform: scale(1.3); }
+}
+
+.roulette-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.roulette-pull-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.roulette-close-btn {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.roulette-close-btn:hover {
+  background: #e0e0e0;
+}
+
 /* --- Export Button --- */
 .btn-export {
   background: #f0f0f0;

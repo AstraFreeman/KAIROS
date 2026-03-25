@@ -48,6 +48,14 @@ KAIROS.app = (function () {
         console.warn('Could not load cairo data', e);
       }
 
+      // Load Cards data
+      try {
+        var cardsData = await KAIROS.utils.loadJSON('data/cards.json');
+        KAIROS.cards.init(cardsData);
+      } catch (e) {
+        console.warn('Could not load cards data', e);
+      }
+
       // Build shell
       renderHeader();
       renderSidebar();
@@ -74,6 +82,9 @@ KAIROS.app = (function () {
       });
       KAIROS.router.register('cairo', function (param, container) {
         KAIROS.cairo.render(param, container);
+      });
+      KAIROS.router.register('cards', function (param, container) {
+        KAIROS.roulette.renderCollection(container);
       });
 
       // Check if new user
@@ -165,6 +176,7 @@ KAIROS.app = (function () {
       { href: '#feed', text: '📰 Стрічка' },
       { href: '#my-profile', text: '👤 Мій профіль' },
       { href: '#achievements', text: '🏆 Досягнення' },
+      { href: '#cards', text: '🎴 Картки' },
       { href: '#cairo', text: '🏛 Каїр' }
     ];
 
@@ -243,10 +255,12 @@ KAIROS.app = (function () {
     statsH3.textContent = 'Мій прогрес';
     statsBox.appendChild(statsH3);
 
+    var cardTokens = KAIROS.tracker.getState().cardTokens || 0;
     var statRows = [
       { label: 'Балів', value: stats.totalPoints },
       { label: 'Виконано', value: stats.postsCompleted },
-      { label: 'Досягнень', value: stats.achievements }
+      { label: 'Досягнень', value: stats.achievements },
+      { label: '🎴 Жетони', value: cardTokens }
     ];
 
     statRows.forEach(function (s) {

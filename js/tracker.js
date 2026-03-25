@@ -15,8 +15,12 @@ KAIROS.tracker = (function () {
     completedPostIds: [],
     likedPostIds: [],
     comments: {},       // postId -> [{ text, timestamp }]
+    taskResponses: {},  // postId -> { text, result, timestamp }
     earnedAchievements: [],
-    totalPoints: 0
+    totalPoints: 0,
+    cardTokens: 0,
+    inventory: [],      // [{ cardId, earnedAt }]
+    pullHistory: []     // [{ cardId, rarity, timestamp }]
   };
 
   var state = null;
@@ -70,6 +74,10 @@ KAIROS.tracker = (function () {
     if (action.type === 'complete' && state.completedPostIds.indexOf(action.postId) === -1) {
       state.completedPostIds.push(action.postId);
       state.totalPoints += (action.points || 0);
+      // нараховуємо жетони для карток
+      var difficulty = action.difficulty || 1;
+      var tokens = difficulty >= 3 ? 2 : 1;
+      state.cardTokens += tokens;
     }
 
     if (action.type === 'like' && state.likedPostIds.indexOf(action.postId) === -1) {
@@ -87,6 +95,19 @@ KAIROS.tracker = (function () {
         text: action.text,
         timestamp: action.timestamp
       });
+    }
+
+    if (action.type === 'task-response') {
+      state.taskResponses[action.postId] = {
+        text: action.text,
+        result: action.result,
+        timestamp: action.timestamp
+      };
+    }
+
+    if (action.type === 'card-pull') {
+      state.inventory.push({ cardId: action.cardId, earnedAt: action.timestamp });
+      state.pullHistory.push({ cardId: action.cardId, rarity: action.rarity, timestamp: action.timestamp });
     }
 
     save();
@@ -151,6 +172,23 @@ KAIROS.tracker = (function () {
     return state;
   }
 
+  function getTaskResponse(postId) {
+    return state.taskResponses[postId] || null;
+  }
+
+  function hasCard(cardId) {
+    return state.inventory.some(function (c) { return c.cardId === cardId; });
+  }
+
+  function spendTokens(amount) {
+    if (state.cardTokens >= amount) {
+      state.cardTokens -= amount;
+      save();
+      return true;
+    }
+    return false;
+  }
+
   function getStats() {
     return {
       name: state.studentName,
@@ -185,6 +223,9 @@ KAIROS.tracker = (function () {
     hasCompleted: hasCompleted,
     hasLiked: hasLiked,
     getComments: getComments,
+    getTaskResponse: getTaskResponse,
+    hasCard: hasCard,
+    spendTokens: spendTokens,
     estimateLevel: estimateLevel,
     recentTopics: recentTopics,
     earnAchievement: earnAchievement,
