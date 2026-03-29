@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- Dark stormy background (Viking style) -->
+  <rect width="400" height="300" fill="#1a2a4a"/>
+  <!-- Dramatic sky lines -->
+  <rect x="0" y="0" width="400" height="80" fill="#2c4a6a"/>
+  <!-- Big Viking with horned helmet (THE MYTH) -->
+  <g transform="translate(120,30)">
+    <!-- Helmet -->
+    <ellipse cx="60" cy="50" rx="48" ry="28" fill="#7a6a5a"/>
+    <rect x="18" y="30" width="84" height="42" fill="#7a6a5a" rx="4"/>
+    <!-- Horns (the mythological fake ones) -->
+    <path d="M18,38 Q-15,15 -10,0 Q-5,-8 8,5 Q0,20 20,38" fill="#c8b87a"/>
+    <path d="M102,38 Q135,15 130,0 Q125,-8 112,5 Q120,20 100,38" fill="#c8b87a"/>
+    <!-- Face -->
+    <rect x="25" y="42" width="70" height="52" rx="8" fill="#c8a882"/>
+    <!-- Eyes (fierce) -->
+    <ellipse cx="44" cy="60" rx="8" ry="6" fill="#1a1208"/>
+    <ellipse cx="76" cy="60" rx="8" ry="6" fill="#1a1208"/>
+    <!-- Beard (epic) -->
+    <path d="M32,80 Q60,108 88,80 L92,95 Q60,130 28,95 Z" fill="#c8a882"/>
+    <path d="M38,85 L35,120 Q60,135 85,120 L82,85" fill="#8b6033"/>
+    <!-- Body (fur coat) -->
+    <ellipse cx="60" cy="165" rx="55" ry="70" fill="#5a3a22"/>
+    <!-- Arm with axe -->
+    <line x1="108" y1="130" x2="155" y2="105" stroke="#5a3a22" stroke-width="12"/>
+    <!-- Battle axe -->
+    <rect x="150" y="85" width="8" height="45" fill="#6b3a1f"/>
+    <ellipse cx="162" cy="100" rx="20" ry="14" fill="#8a8a7a"/>
+    <ellipse cx="150" cy="100" rx="8" ry="10" fill="#6a6a5a"/>
+  </g>
+  <!-- MYTH label (big stamped effect) -->
+  <rect x="260" y="40" width="125" height="55" fill="#c0392b" transform="rotate(-8,260,40)"/>
+  <text x="323" y="75" fill="#ffffff" font-family="Impact, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" transform="rotate(-8,323,75)">МІФ!</text>
+  <!-- Top shocking banner -->
+  <rect x="0" y="0" width="400" height="36" fill="rgba(0,0,0,0.8)"/>
+  <text x="200" y="25" fill="#f39c12" font-family="Impact, sans-serif" font-size="20" font-weight="bold" text-anchor="middle">ВІКІНГИ НОСИЛИ РОГИ НА ШОЛОМАХ!</text>
+  <!-- Source label -->
+  <rect x="0" y="268" width="400" height="32" fill="rgba(0,0,0,0.8)"/>
+  <text x="200" y="288" fill="#bdc3c7" font-family="sans-serif" font-size="11" text-anchor="middle">ІсторіяFAKTS.ua · «Правда про варягів» · 2024</text>
+</svg>

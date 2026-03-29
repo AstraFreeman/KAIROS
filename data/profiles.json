@@ -141,6 +141,20 @@
       "isHistoricalFigure": false
     },
     {
+      "id": "history-fakts-ua",
+      "name": "ІсторіяFAKTS.ua",
+      "role": "Популярний канал про «правду» в історії",
+      "avatarUrl": "img/avatars/default.svg",
+      "coverColor": "#c0392b",
+      "bio": "Розповідаємо ТЕ, ЧОГ ВАС НЕ ВЧИЛИ в школі! Шокуючі факти, альтернативна історія, сенсації кожного дня! Підписуйтесь!",
+      "era": "suchasnist",
+      "historicalPeriod": "XXI ст.",
+      "location": "Інтернет, скрізь",
+      "friends": [],
+      "interests": ["сенсації", "альтернативна історія", "вірусні факти"],
+      "isHistoricalFigure": false
+    },
+    {
       "id": "student-olha",
       "name": "Ольга Бондаренко",
       "role": "Студентка 4 курсу",

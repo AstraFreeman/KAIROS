@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- Parchment background -->
+  <rect width="400" height="300" fill="#f2e4c4"/>
+  <!-- Aged texture overlay -->
+  <rect width="400" height="300" fill="url(#parchment)" opacity="0.3"/>
+  <!-- Outer ornamental frame (dark red) -->
+  <rect x="8" y="8" width="384" height="284" fill="none" stroke="#8b1a1a" stroke-width="8"/>
+  <rect x="16" y="16" width="368" height="268" fill="none" stroke="#c8a54a" stroke-width="3"/>
+  <!-- Corner ornaments -->
+  <g fill="#8b1a1a">
+    <rect x="8" y="8" width="30" height="6"/><rect x="8" y="8" width="6" height="30"/>
+    <rect x="362" y="8" width="30" height="6"/><rect x="386" y="8" width="6" height="30"/>
+    <rect x="8" y="280" width="30" height="6"/><rect x="8" y="262" width="6" height="30"/>
+    <rect x="362" y="280" width="30" height="6"/><rect x="386" y="262" width="6" height="30"/>
+  </g>
+  <!-- Church/monastery silhouette at top -->
+  <g fill="#3d2b1a" opacity="0.85">
+    <!-- Central church dome -->
+    <rect x="175" y="65" width="50" height="70" fill="#3d2b1a"/>
+    <polygon points="200,35 170,68 230,68" fill="#3d2b1a"/>
+    <rect x="195" y="25" width="10" height="18" fill="#3d2b1a"/>
+    <!-- Cross on dome -->
+    <rect x="198" y="18" width="4" height="14" fill="#8b1a1a"/>
+    <rect x="194" y="22" width="12" height="3" fill="#8b1a1a"/>
+    <!-- Side towers -->
+    <rect x="130" y="85" width="35" height="50" fill="#3d2b1a"/>
+    <polygon points="148,62 128,88 168,88" fill="#3d2b1a"/>
+    <rect x="235" y="85" width="35" height="50" fill="#3d2b1a"/>
+    <polygon points="252,62 232,88 272,88" fill="#3d2b1a"/>
+  </g>
+  <!-- Illuminated title -->
+  <rect x="50" y="150" width="300" height="55" fill="#8b1a1a" rx="3"/>
+  <rect x="54" y="154" width="292" height="47" fill="none" stroke="#c8a54a" stroke-width="2"/>
+  <text x="200" y="183" fill="#f2e4c4" font-family="Georgia, serif" font-size="20" font-weight="bold" text-anchor="middle">Повість минулих літ</text>
+  <!-- Author line -->
+  <text x="200" y="222" fill="#5c3d1e" font-family="Georgia, serif" font-size="14" text-anchor="middle" font-style="italic">Нестора, чорноризця Феодосієвого монастиря</text>
+  <!-- Bottom caption -->
+  <text x="200" y="255" fill="#8b6033" font-family="Georgia, serif" font-size="12" text-anchor="middle">Київська Русь · Ілюмінована сторінка · XII ст.</text>
+  <!-- Decorative small florals -->
+  <circle cx="55" cy="165" r="6" fill="#c8a54a"/>
+  <circle cx="345" cy="165" r="6" fill="#c8a54a"/>
+  <circle cx="55" cy="190" r="6" fill="#c8a54a"/>
+  <circle cx="345" cy="190" r="6" fill="#c8a54a"/>
+</svg>

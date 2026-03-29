@@ -26,7 +26,8 @@ KAIROS.app = (function () {
       // Load all posts
       var topicFiles = [
         'starodavnij-svit', 'serednovichchya',
-        'novyj-chas', 'moderna', 'suchasnist'
+        'novyj-chas', 'moderna', 'suchasnist',
+        'reklama'
       ];
       var allPosts = [];
       for (var i = 0; i < topicFiles.length; i++) {
@@ -66,6 +67,10 @@ KAIROS.app = (function () {
         KAIROS.feed.render(null, container);
       });
       KAIROS.router.register('topic', function (slug, container) {
+        if (slug === 'reklama') {
+          KAIROS.router.navigate('#feed');
+          return;
+        }
         KAIROS.feed.render(slug, container);
       });
       KAIROS.router.register('profile', function (id, container) {

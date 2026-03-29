@@ -19,11 +19,13 @@ KAIROS.feed = (function () {
     var recent = tracker.recentTopics(3);
     var scored = [];
 
+    // ads (type:'ad') завжди включаються в будь-яку стрічку
     var candidates = filterTopic
-      ? allPosts.filter(function (p) { return p.topic === filterTopic; })
+      ? allPosts.filter(function (p) { return p.topic === filterTopic || p.type === 'ad'; })
       : allPosts;
 
     candidates.forEach(function (post) {
+
       // check prerequisites
       if (post.prerequisites && post.prerequisites.length > 0) {
         var allMet = post.prerequisites.every(function (reqId) {
@@ -41,12 +43,17 @@ KAIROS.feed = (function () {
         score += 0.5; // small base for seen posts
       }
 
-      // difficulty match
-      var diffDelta = Math.abs(post.difficulty - level);
-      if (diffDelta <= config.maxDifficultyJump) {
-        score += config.feedAlgorithm.difficultyMatchWeight * (1 - diffDelta / 5);
+      // difficulty match — skip for non-task posts
+      if (post.difficulty) {
+        var diffDelta = Math.abs(post.difficulty - level);
+        if (diffDelta <= config.maxDifficultyJump) {
+          score += config.feedAlgorithm.difficultyMatchWeight * (1 - diffDelta / 5);
+        } else {
+          score *= 0.3; // penalize but don't fully hide
+        }
       } else {
-        score *= 0.3; // penalize but don't fully hide
+        // entertainment / ad posts get a steady mid-range score boost
+        score += 1.5;
       }
 
       // topic diversity
@@ -83,7 +90,8 @@ KAIROS.feed = (function () {
         'serednovichchya': 'Середньовіччя',
         'novyj-chas': 'Новий час',
         'moderna': 'Модерна доба',
-        'suchasnist': 'Сучасність'
+        'suchasnist': 'Сучасність',
+        'reklama': '📢 Реклама'
       };
       header.textContent = TOPIC_NAMES[filterTopic] || filterTopic;
     } else {

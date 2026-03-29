@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <!-- Aged newspaper/pamphlet background -->
+  <rect width="400" height="300" fill="#faf0d8"/>
+  <!-- Tricolor stripes (faded) at sides -->
+  <rect x="0" y="0" width="12" height="300" fill="#1a3f8f" opacity="0.7"/>
+  <rect x="388" y="0" width="12" height="300" fill="#c0392b" opacity="0.7"/>
+  <!-- Frame lines (etching style) -->
+  <rect x="20" y="20" width="360" height="260" fill="none" stroke="#2c2c2c" stroke-width="3"/>
+  <rect x="24" y="24" width="352" height="252" fill="none" stroke="#2c2c2c" stroke-width="1"/>
+  <!-- Title banner (Liberté style) -->
+  <rect x="30" y="28" width="340" height="38" fill="#1a3f8f"/>
+  <text x="200" y="53" fill="#faf0d8" font-family="Georgia, serif" font-size="20" font-weight="bold" text-anchor="middle" font-style="italic">Liberté! Égalité! Fraternité!</text>
+  <!-- Guillotine (simplified silhouette) -->
+  <g fill="#2c2c2c" transform="translate(60,75)">
+    <rect x="0" y="0" width="10" height="140"/>
+    <rect x="60" y="0" width="10" height="140"/>
+    <rect x="0" y="0" width="70" height="12"/>
+    <!-- Blade -->
+    <polygon points="10,40 68,40 38,75" fill="#888"/>
+    <!-- Weight -->
+    <rect x="15" y="25" width="40" height="20" fill="#555"/>
+  </g>
+  <!-- Revolutionary figure (Marianne) -->
+  <g transform="translate(185,70)">
+    <!-- Body -->
+    <ellipse cx="30" cy="115" rx="28" ry="55" fill="#2c2c2c"/>
+    <!-- Head -->
+    <circle cx="30" cy="52" r="22" fill="#c8a882"/>
+    <!-- Phrygian cap -->
+    <ellipse cx="30" cy="35" rx="18" ry="10" fill="#c0392b"/>
+    <polygon points="30,18 16,38 44,38" fill="#c0392b"/>
+    <!-- Raised arm with flag -->
+    <line x1="55" y1="85" x2="100" y2="55" stroke="#2c2c2c" stroke-width="8" stroke-linecap="round"/>
+    <!-- Flag (tricolor) -->
+    <rect x="100" y="30" width="12" height="35" fill="#1a3f8f"/>
+    <rect x="112" y="30" width="12" height="35" fill="#faf0d8"/>
+    <rect x="124" y="30" width="12" height="35" fill="#c0392b"/>
+    <!-- Other arm down -->
+    <line x1="5" y1="90" x2="-20" y2="115" stroke="#2c2c2c" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <!-- Crowd (simplified row of heads) -->
+  <g fill="#2c2c2c" opacity="0.6">
+    <circle cx="45" cy="230" r="10"/><circle cx="68" cy="235" r="9"/><circle cx="90" cy="228" r="11"/>
+    <circle cx="340" cy="232" r="10"/><circle cx="362" cy="226" r="11"/><circle cx="382" cy="233" r="9"/>
+  </g>
+  <!-- Caption -->
+  <text x="200" y="270" fill="#2c2c2c" font-family="Georgia, serif" font-size="12" text-anchor="middle" font-style="italic">Паризький памфлет, 1789 р. · Карикатура епохи Революції</text>
+</svg>

@@ -10,7 +10,7 @@ KAIROS.ui = (function () {
 
   function postCard(post, profile) {
     var card = document.createElement('div');
-    card.className = 'post-card';
+    card.className = 'post-card' + (post.type === 'ad' ? ' post-card-ad' : '');
     card.dataset.postId = post.id;
 
     // Header
@@ -69,11 +69,46 @@ KAIROS.ui = (function () {
       }
     }
 
+    // Entertainment / ad type badge
+    var ENT_BADGES = {
+      'fun-fact':  { cls: 'post-badge-fun',       icon: '✨', label: 'Цікавинка'  },
+      'story':     { cls: 'post-badge-story',      icon: '📖', label: 'Із життя'   },
+      'caricature':{ cls: 'post-badge-caricature', icon: '🎨', label: 'Карикатура' },
+      'poster':    { cls: 'post-badge-poster',     icon: '🖼',  label: 'Плакат'     },
+      'ad':        { cls: 'post-badge-ad',         icon: '📢', label: 'Реклама'    }
+    };
+    var badgeDef = ENT_BADGES[post.type];
+    if (badgeDef) {
+      var badge = document.createElement('span');
+      badge.className = 'post-ent-badge ' + badgeDef.cls;
+      badge.textContent = badgeDef.icon + ' ' + badgeDef.label;
+      body.appendChild(badge);
+    }
+
     var textEl = document.createElement('p');
     textEl.textContent = post.content.text;
     body.appendChild(textEl);
 
-    // Attachment
+    // Image (caricature / poster / ad visual)
+    if (post.content.image) {
+      var imgWrap = document.createElement('div');
+      imgWrap.className = 'post-image-wrap';
+      var imgEl = document.createElement('img');
+      imgEl.src = post.content.image;
+      imgEl.alt = post.content.imageCaption || post.content.text.substring(0, 60);
+      imgEl.className = 'post-image';
+      imgEl.onerror = function () { imgWrap.style.display = 'none'; };
+      imgWrap.appendChild(imgEl);
+      if (post.content.imageCaption) {
+        var caption = document.createElement('div');
+        caption.className = 'post-image-caption';
+        caption.textContent = post.content.imageCaption;
+        imgWrap.appendChild(caption);
+      }
+      body.appendChild(imgWrap);
+    }
+
+    // Attachment (text quote)
     if (post.content.attachment) {
       var att = document.createElement('div');
       att.className = 'post-attachment';
@@ -100,6 +135,27 @@ KAIROS.ui = (function () {
       }
     };
     actionsBar.appendChild(commentBtn);
+
+    // "Перевірити факт" button for ad posts
+    if (post.type === 'ad' && post.debunk) {
+      var debunkBtn = document.createElement('button');
+      debunkBtn.className = 'post-action-btn post-debunk-btn';
+      debunkBtn.innerHTML = '<span class="icon">🔍</span>Перевірити факт';
+      var debunkShown = false;
+      debunkBtn.onclick = function () {
+        if (debunkShown) return;
+        debunkShown = true;
+        var debunkEl = document.createElement('div');
+        debunkEl.className = 'post-debunk-reveal';
+        debunkEl.innerHTML = '<strong>✅ Факт-чек:</strong> ' + utils.escapeHtml(post.debunk);
+        card.querySelector('.post-body').appendChild(debunkEl);
+        debunkBtn.disabled = true;
+        debunkBtn.textContent = '✅ Перевірено';
+        tracker.record({ type: 'view', postId: post.id, topic: post.topic });
+        KAIROS.app.updateRightbar();
+      };
+      actionsBar.appendChild(debunkBtn);
+    }
 
     // Complete task button or response form
     if (post.taskType && !tracker.hasCompleted(post.id)) {
